@@ -1237,16 +1237,10 @@
             >
 
             <input
-                type="hidden"
-                name="turma_id"
-                value="<?=
-                    htmlspecialchars(
-                        ($perfil === 'professor')
-                        //? $turma_id_sessao
-                        //: $turma_filtro
-                    )
-                ?>"
-            >
+    type="hidden"
+    name="turma_id"
+    value="<?= htmlspecialchars($turma_filtro ?? '') ?>">
+
 
 
             <div class="table-card">

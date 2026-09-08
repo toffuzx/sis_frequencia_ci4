@@ -37,7 +37,7 @@ $routes->get('dashboard', 'Dashboard::index');
 $routes->get('login', 'Login::index');
 $routes->post('processar', 'Login::processar');
 $routes->get('logout', 'Login::logout');
-$routes->get('salvar_frequencia', 'Salvar_frequencia::index');
+$routes->post('salvar_frequencia', 'Salvar_frequencia::salvar');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
