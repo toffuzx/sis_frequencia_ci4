@@ -1,0 +1,4 @@
+Usa isso ai pra apagar os usuarios inuteis (Alunos)
+
+DELETE FROM table_name
+WHERE perfil = 'lideranca';
