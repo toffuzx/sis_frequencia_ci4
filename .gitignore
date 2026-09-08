@@ -1,0 +1,44 @@
+# ==========================================
+# CodeIgniter 4 - Base Gitignore
+# ==========================================
+
+# Arquivos de Configuração Local e Ambiente (NUNCA envie para o Git)
+.env
+.env.bak
+.env.*
+! .env.example
+
+# Dependências do Composer
+/vendor/
+
+# Diretório Writable (Cache, Logs, Sessions, etc.)
+/writable/cache/*
+/writable/debugbar/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+
+# Mantém a estrutura de pastas do diretório writable no repositório, ignorando o conteúdo
+!/writable/cache/.gitkeep
+!/writable/debugbar/.gitkeep
+!/writable/logs/.gitkeep
+!/writable/session/.gitkeep
+!/writable/uploads/.gitkeep
+
+# Ferramentas de Desenvolvimento e Testes
+/phpunit.xml
+/.phpunit.result.cache
+
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDEs comuns (VS Code / PhpStorm)
+/.vscode/
+/.idea/
