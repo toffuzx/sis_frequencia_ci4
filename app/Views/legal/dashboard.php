@@ -15,7 +15,7 @@
 
     <link
         rel="icon"
-        href="./logo_WR.png"
+        href="<?= base_url('img/logo_WR.png') ?>"
         type="image/png"
     >
 
