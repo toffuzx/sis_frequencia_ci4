@@ -139,19 +139,15 @@
     <a href="javascript:void(0)" class="btn-fechar" onclick="toggleMenuRight()">&times;</a>
     
     <div class="sidebar-header">
-        <img src="logo.png.jpeg" alt="Logo Escola" class="school-logo">
+        <img src="<?= base_url('assets/images/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
 
     <div class="menu-items">
-        <a href="dashboard.php"><i class="fa-solid fa-chart-line"></i> Frequência</a>
-        <a href="faltas.php"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
-        <a href="planilhas.php"><i class="fa-solid fa-file-excel"></i> Planilha</a>
-        <a href="config.php"><i class="fa-solid fa-gear"></i> Configurações</a>
-        <a href="perfil.php"><i class="fa-solid fa-user"></i> Perfil</a>
-        
-        <a href="login.php" class="txt-sair" style="margin-top: 30px;">
-            <i class="fa-solid fa-right-from-bracket"></i> Sair da conta
-        </a>
+        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
+        <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
+        <a href="<?= base_url('planilhas') ?>"><i class="fa-solid fa-file-excel"></i> Planilha</a>
+        <a href="<?= base_url('config') ?>"><i class="fa-solid fa-gear"></i> Configurações</a>
+        <a href="<?= base_url('perfil') ?>"><i class="fa-solid fa-user"></i> Perfil</a>
     </div>
 </div>
 
