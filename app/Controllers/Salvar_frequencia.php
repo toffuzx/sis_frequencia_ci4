@@ -35,15 +35,7 @@ class Salvar_frequencia extends BaseController
                 'aluno_id'      => $alunoId,
                 'data_registro' => $dataRegistro,
 
-                'aula_1' => $aulas[1] ?? 'P',
-                'aula_2' => $aulas[2] ?? 'P',
-                'aula_3' => $aulas[3] ?? 'P',
-                'aula_4' => $aulas[4] ?? 'P',
-                'aula_5' => $aulas[5] ?? 'P',
-                'aula_6' => $aulas[6] ?? 'P',
-                'aula_7' => $aulas[7] ?? 'P',
-                'aula_8' => $aulas[8] ?? 'P',
-                'aula_9' => $aulas[9] ?? 'P',
+                'aula_1' => $aulas[1] ?? 'P'
             ];
 
             if ($registro) {

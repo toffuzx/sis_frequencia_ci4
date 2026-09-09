@@ -1,4 +1,20 @@
-Usa isso ai pra apagar os usuarios inuteis (Alunos)
+'usar de maneiras independentes' 
+'apagar os usuarios da liderança'
 
 DELETE FROM table_name
 WHERE perfil = 'lideranca';
+
+
+
+
+'apagar as aulas 2 a 9 da tabela frequencias'
+
+ALTER TABLE frequencias
+DROP COLUMN aula_2,
+DROP COLUMN aula_3,
+DROP COLUMN aula_4,
+DROP COLUMN aula_5,
+DROP COLUMN aula_6,
+DROP COLUMN aula_7,
+DROP COLUMN aula_8,
+DROP COLUMN aula_9;
