@@ -1954,7 +1954,7 @@ observacoes.value = observacoesSalvas;
 
 
         // ENVIA PARA O PHP
-        fetch('salvar_justificativa.php', {
+        fetch('<?php echo base_url("salvar_justificativa"); ?>', {
 
             method: 'POST',
 
@@ -1966,7 +1966,7 @@ observacoes.value = observacoesSalvas;
 
     aluno_id: alunoId,
 
-    data_registro: '<?= $data_filtro ?>',
+    data_registro: "<?= htmlspecialchars($data_filtro) ?>",
 
     chegou_atrasado: atrasado ? 1 : 0,
 
@@ -2048,7 +2048,7 @@ observacoes.value = observacoesSalvas;
         e.preventDefault();
         const fd = new FormData(formJust);
         btnSalvarJust.disabled=true; btnSalvarJust.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
-        fetch('salvar_justificativa_falta.php',{method:'POST',body:fd})
+        fetch('<?= base_url("salvar_justificativa") ?>', {method:'POST',body:fd})
         .then(r=>r.json()).then(resultado=>{
             if(!resultado.sucesso) throw new Error(resultado.mensagem || 'Erro ao salvar.');
             window.location.reload();

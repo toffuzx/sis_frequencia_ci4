@@ -38,6 +38,7 @@ $routes->get('login', 'Login::index');
 $routes->post('processar', 'Login::processar');
 $routes->get('logout', 'Login::logout');
 $routes->post('salvar_frequencia', 'Salvar_frequencia::salvar');
+$routes->post('salvar_justificativa', 'Salvar_justificativa::salvar');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
