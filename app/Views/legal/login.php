@@ -188,7 +188,7 @@
         dadosBanco.forEach(turma => {
             let opcao = document.createElement('option');
             opcao.value = turma.id; 
-            opcao.textContent = `${turma.serie} - ${turma.nome}`;
+            opcao.textContent = `${turma.nome}`;
             selectTurma.appendChild(opcao);
         });
     </script> 
