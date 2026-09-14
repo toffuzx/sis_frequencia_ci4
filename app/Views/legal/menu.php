@@ -141,13 +141,18 @@
     <div class="sidebar-header">
         <img src="<?= base_url('img/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
-
+    <?php if ($perfil === 'gestão'): ?>
     <div class="menu-items">
         <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
         <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
-
-        <a href="<?= base_url('config') ?>"><i class="fa-solid fa-gear"></i> Configurações</a>
-            </div>
+        <a href="<?= base_url('Tabela') ?>"><i class="fa-solid fa-table"></i> Tabela de justificativas </a>
+    </div>
+    <?php else: ?>
+    <div class="menu-items">
+        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
+        <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
+    </div>
+    <?php endif; ?>
 </div>
 
 <script>
