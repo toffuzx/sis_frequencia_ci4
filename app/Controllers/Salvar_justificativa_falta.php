@@ -34,7 +34,7 @@ class Salvar_justificativa_falta extends BaseController
             // Processa o upload do arquivo se enviado
             if ($fileAtestado && $fileAtestado->isValid() && !$fileAtestado->hasMoved()) {
                 $novoNome = $fileAtestado->getRandomName();
-                $caminhoUpload = WRITEPATH . 'uploads/atestados'; // Corrigido para WRITEPATH
+                $caminhoUpload = WRITEPATH . 'uploads/atestados'; // Corrigido para >WRITEPATH<
 
                 if (!is_dir($caminhoUpload)) {
                     mkdir($caminhoUpload, 0777, true);

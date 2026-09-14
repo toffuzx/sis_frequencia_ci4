@@ -916,7 +916,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (resultado.sucesso) {
                 fecharJanelaAluno();
                 window.location.reload();
-                
+                alert(resultado.mensagem || 'Justificativa salva com sucesso.');
+
             } else {
                 alert(resultado.mensagem || 'Erro ao salvar justificativa.');
             }
@@ -979,8 +980,12 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('<?= site_url("salvar_justificativa_falta") ?>', { method: 'POST', body: fd })
         .then(r => r.json())
         .then(resultado => {
-            if (!resultado.sucesso) throw new Error(resultado.mensagem || 'Erro ao salvar.');
-            window.location.reload();
+            if (resultado.sucesso) {
+                alert(resultado.mensagem || 'Justificativa salva com sucesso.');
+                window.location.reload();
+            } else {
+                throw new Error(resultado.mensagem || 'Erro ao salvar.');
+            }
         })
         .catch(err => { 
             alert(err.message); 
