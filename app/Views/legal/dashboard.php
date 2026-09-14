@@ -745,8 +745,8 @@
                 <div class="justificativa-aviso">Ao salvar, a falta será marcada como <strong>J (Justificada)</strong>.</div>
                 
                 <div class="campo-modal">
-                    <label class="titulo-campo" for="motivo-falta">Motivo</label>
-                    <select id="motivo-falta" name="motivo" class="filter-input" style="width:100%;" required>
+                    <label class="titulo-campo" for="motivo">Motivo</label>
+                    <select id="motivo" name="motivo" class="filter-input" style="width:100%;" required>
                         <option value="">Selecionar motivo</option>
                         <option value="Atestado médico">Atestado médico</option>
                         <option value="Compromisso escolar">Compromisso escolar</option>
@@ -759,13 +759,40 @@
                     <label class="titulo-campo" for="observacoes-falta">Observações</label>
                     <textarea id="observacoes-falta" name="observacoes" class="observacao-input" placeholder="Observações sobre a justificativa..."></textarea>
                 </div>
-
-                <div class="campo-modal">
+                <div class="campo-modal"id="atestado-campo" style="display:none;">
                     <label class="titulo-campo" for="atestado-arquivo">Atestado / documento</label>
                     <input id="atestado-arquivo" name="atestado" class="arquivo-input" type="file" accept=".pdf,.jpg,.jpeg,.png">
                     <div id="arquivo-existente" class="arquivo-info"></div>
                     <div id="arquivo-link" class="arquivo-info"></div>
                 </div>
+<script>
+const selectFalta = document.getElementById('motivo');
+const blocoExtra = document.getElementById('atestado-campo');
+const inputArquivo = document.getElementById('atestado-arquivo');
+const divArquivoExistente = document.getElementById('arquivo-existente');
+
+// Função centralizada para validar o estado do campo de arquivo
+function verificarMotivo() {
+    if (selectFalta.value === "Atestado médico") {
+        blocoExtra.style.display = "block"; 
+        
+        // Verifica se o texto na div diz que há um documento anexado
+        const temArquivoSalvo = divArquivoExistente.textContent.includes("Documento atual:");
+        
+        // Só obriga o upload se o aluno NÃO tiver um arquivo já gravado
+        inputArquivo.required = !temArquivoSalvo;          
+    } else {
+        blocoExtra.style.display = "none"; 
+        inputArquivo.required = false;       
+        inputArquivo.value = "";               
+    }
+}
+
+// Monitora se o usuário mudar a opção manualmente clicando na tela
+selectFalta.addEventListener('change', verificarMotivo);
+
+
+</script>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">Fechar</button>
@@ -889,6 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (resultado.sucesso) {
                 fecharJanelaAluno();
                 window.location.reload();
+                
             } else {
                 alert(resultado.mensagem || 'Erro ao salvar justificativa.');
             }
@@ -909,7 +937,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('justificativa-nome').textContent = nome ? nome.dataset.nome : 'Justificar falta';
         document.getElementById('justificativa-data').textContent = 'Data: <?= htmlspecialchars($data_filtro) ?>';
         document.getElementById('justificativa-aluno-id').value = botao.dataset.aluno;
-        document.getElementById('motivo-falta').value = botao.dataset.motivo || '';
+        document.getElementById('motivo').value = botao.dataset.motivo || '';
         document.getElementById('observacoes-falta').value = botao.dataset.observacoes || '';
         document.getElementById('atestado-arquivo').value = '';
         document.getElementById('arquivo-existente').textContent = botao.dataset.arquivoNome ? 'Documento atual: ' + botao.dataset.arquivoNome : 'Nenhum documento anexado.';
@@ -921,12 +949,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const somenteVisualizacao = botao.textContent.trim() === 'J';
         btnSalvarJust.style.display = somenteVisualizacao ? 'none' : '';
-        document.getElementById('motivo-falta').disabled = somenteVisualizacao;
+        document.getElementById('motivo').disabled = somenteVisualizacao;
         document.getElementById('observacoes-falta').disabled = somenteVisualizacao;
         document.getElementById('atestado-arquivo').disabled = somenteVisualizacao;
 
         modalJust.classList.add('aberto'); 
         document.body.style.overflow = 'hidden';
+
+        verificarMotivo();
+      
     }
 
     function fecharModalJustificativa() { 
@@ -959,7 +990,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>

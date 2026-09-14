@@ -13,14 +13,6 @@ class FrequenciaModel extends Model
         'aluno_id',
         'data_registro',
         'aula_1',
-        'aula_2',
-        'aula_3',
-        'aula_4',
-        'aula_5',
-        'aula_6',
-        'aula_7',
-        'aula_8',
-        'aula_9',
     ];
 
     protected $returnType = 'array';
