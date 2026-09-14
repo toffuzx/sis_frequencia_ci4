@@ -6,66 +6,96 @@ use App\Models\JustificativaalunoModel;
 
 class Salvar_justificativa extends BaseController
 {
-    public function salvar(){
-        if($this->request->getmethod()!== 'post'){
-            return redirect()->to('/dashboard');
-        }
-        $dataRegistro = $this->request->getPost('data_registro');
-        $justificativas_alunos = $this->request->getPost('justificativas_alunos');
-        $turmaId = $this->request->getPost('turma_id');
-    
-   if (empty($dataRegistro) || empty($justificativas_alunos)) {
-        return redirect()
-        ->to('/dashboard')
-        ->with('erro', 'Deu ruim');
-    }
-     $model = new JustificativaalunoModel();
+    public function salvar()
+    {
+        // 1. Verifica se os dados vieram via JSON (Modal 1 - Botão "Marcar")
+        $json = $this->request->getJSON(true);
 
-      // Percorre cada aluno
-        foreach ($justificativas_alunos as $alunoId => $justificativa) {
+        if (!empty($json)) {
+            $alunoId      = $json['aluno_id'] ?? null;
+            $dataRegistro = $json['data_registro'] ?? null;
+            $atrasado     = $json['chegou_atrasado'] ?? 0;
+            $fardamento   = $json['fardamento_incompleto'] ?? 0;
+            $observacoes  = $json['observacoes'] ?? '';
 
-            // Procura se esse aluno já possui frequência nessa data
-            $registro = $model
-                ->where('aluno_id', $alunoId)
-                ->where('data_registro', $dataRegistro)
-                ->first();
+            if (!$alunoId || !$dataRegistro) {
+                return $this->response->setJSON([
+                    'sucesso'  => false,
+                    'mensagem' => 'Dados do aluno ou data inválidos.'
+                ]);
+            }
 
-            // Dados que serão gravados
+            $model = new JustificativaalunoModel();
+
+            $registro = $model->where('aluno_id', $alunoId)
+                              ->where('data_registro', $dataRegistro)
+                              ->first();
+
             $dados = [
-                'aluno_id'      => $alunoId,
-                'data_registro' => $dataRegistro,
-
-                'aula_1' => $aulas[1] ?? 'P',
-                'aula_2' => $aulas[2] ?? 'P',
-                'aula_3' => $aulas[3] ?? 'P',
-                'aula_4' => $aulas[4] ?? 'P',
-                'aula_5' => $aulas[5] ?? 'P',
-                'aula_6' => $aulas[6] ?? 'P',
-                'aula_7' => $aulas[7] ?? 'P',
-                'aula_8' => $aulas[8] ?? 'P',
-                'aula_9' => $aulas[9] ?? 'P',
+                'aluno_id'              => $alunoId,
+                'data_registro'         => $dataRegistro,
+                'chegou_atrasado'       => $atrasado,
+                'fardamento_incompleto' => $fardamento,
+                'observacoes'           => $observacoes,
             ];
 
             if ($registro) {
-
-                // Já existe → atualiza
-                $model->update(
-                    $registro['id'],
-                    $dados
-                );
-
+                $salvou = $model->update($registro['id'], $dados);
             } else {
-
-                // Não existe → cria
-                $model->insert($dados);
+                $salvou = $model->insert($dados);
             }
+
+            return $this->response->setJSON([
+                'sucesso'  => (bool)$salvou,
+                'mensagem' => $salvou ? 'Marcações salvas!' : 'Erro ao salvar marcações.'
+            ]);
         }
 
-        // Volta para o dashboard
-        return redirect()->to(
-            '/dashboard?sucesso=1'
-            . '&data_busca=' . urlencode($dataRegistro)
-            . '&turma_busca=' . urlencode($turmaId)
-        );
+        // 2. Se não veio JSON, trata como POST comum / FormData (Modal 2 - Atestado/Gestão)
+        $alunoId      = $this->request->getPost('aluno_id');
+        $dataRegistro = $this->request->getPost('data_registro');
+        $motivo       = $this->request->getPost('motivo');
+        $observacoes  = $this->request->getPost('observacoes');
+        $fileAtestado = $this->request->getFile('atestado');
+
+        if (!$alunoId || !$dataRegistro) {
+            return $this->response->setJSON([
+                'sucesso'  => false,
+                'mensagem' => 'Dados do aluno ou data não foram enviados.'
+            ]);
+        }
+
+        $dados = [
+            'aluno_id'      => $alunoId,
+            'data_registro' => $dataRegistro,
+            'motivo'        => $motivo,
+            'observacoes'   => $observacoes,
+        ];
+
+        // Trata upload se houver arquivo
+        if ($fileAtestado && $fileAtestado->isValid() && !$fileAtestado->hasMoved()) {
+            $novoNome = $fileAtestado->getRandomName();
+            $fileAtestado->move(WRITABLEPATH . 'uploads/atestados', $novoNome);
+
+            $dados['arquivo_nome']    = $fileAtestado->getClientName();
+            $dados['arquivo_caminho'] = 'uploads/atestados/' . $novoNome;
+        }
+
+        $model = new JustificativaalunoModel();
+
+        $registro = $model->where('aluno_id', $alunoId)
+                          ->where('data_registro', $dataRegistro)
+                          ->first();
+
+        if ($registro) {
+            $salvou = $model->update($registro['id'], $dados);
+        } else {
+            $salvou = $model->insert($dados);
+        }
+
+        return $this->response->setJSON([
+            'sucesso'  => (bool)$salvou,
+            'mensagem' => $salvou ? 'Justificativa salva com sucesso!' : 'Erro ao salvar no banco.'
+        ]);
     }
 }

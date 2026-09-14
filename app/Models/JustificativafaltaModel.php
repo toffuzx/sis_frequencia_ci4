@@ -8,6 +8,8 @@ class JustificativafaltaModel extends Model
 {
     protected $table = 'justificativas_faltas';
     protected $primaryKey = 'id';
+    protected $useAutoIncrement = true;
+    protected $returnType       = 'array';
 
     protected $allowedFields = [
         'aluno_id',
@@ -19,9 +21,11 @@ class JustificativafaltaModel extends Model
         'arquivo_tipo',
         'arquivo_tamanho',
         'usuario_id',
-        'criado_em',
-        'atualizado_em',
+
     ];
 
-    protected $returnType = 'array';
+    protected $useTimestamps = true;
+    protected $createdField  = 'criado_em';
+    protected $updatedField  = 'atualizado_em';
 }
+
