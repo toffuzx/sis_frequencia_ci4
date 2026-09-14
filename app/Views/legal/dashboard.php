@@ -733,7 +733,7 @@
     <div class="modal-aluno" role="dialog" aria-modal="true">
         <div class="modal-header">
             <div class="modal-header-info">
-                <div class="modal-avatar"><i class="fa-solid fa-file-medical"></i></div>
+                <div class="modal-avatar"><i class="fa-solid fa-user"></i></div>
                 <div><h2 id="justificativa-nome">Justificar falta</h2><p id="justificativa-data">-</p></div>
             </div>
             <button type="button" class="btn-fechar-modal" id="fechar-modal-justificativa"><i class="fa-solid fa-xmark"></i></button>
@@ -762,7 +762,7 @@
 
                 <div class="campo-modal">
                     <label class="titulo-campo" for="atestado-arquivo">Atestado / documento</label>
-                    <input id="atestado-arquivo" name="atestado" class="arquivo-input" type="file" accept=".pdf,.jpg,.jpeg,.png">
+                    <input id="atestado-arquivo" name="atestado" class="arquivo-input" type="file" accept=".pdf,.jpg,.jpeg,.png,.pdf,image/*">
                     <div id="arquivo-existente" class="arquivo-info"></div>
                     <div id="arquivo-link" class="arquivo-info"></div>
                 </div>
@@ -889,6 +889,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (resultado.sucesso) {
                 fecharJanelaAluno();
                 window.location.reload();
+                alert(resultado.mensagem || 'Erro ao salvar justificativa.');
+                
             } else {
                 alert(resultado.mensagem || 'Erro ao salvar justificativa.');
             }
@@ -915,8 +917,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('arquivo-existente').textContent = botao.dataset.arquivoNome ? 'Documento atual: ' + botao.dataset.arquivoNome : 'Nenhum documento anexado.';
         
         const linkArquivo = document.getElementById('arquivo-link');
+        const baseUrl = '<?= site_url('download/atestado') ?>';
         linkArquivo.innerHTML = (botao.dataset.arquivoNome && botao.dataset.justificativaId) 
-            ? '<a href="download_atestado.php?id=' + encodeURIComponent(botao.dataset.justificativaId) + '" target="_blank"><i class="fa-solid fa-download"></i> Abrir / baixar documento</a>' 
+            ? '<a href="' + baseUrl + '/' + encodeURIComponent(botao.dataset.justificativaId) + '" target="_blank"><i class="fa-solid fa-download"></i> Abrir / baixar documento</a>' 
             : '';
 
         const somenteVisualizacao = botao.textContent.trim() === 'J';

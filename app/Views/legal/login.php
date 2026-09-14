@@ -149,14 +149,7 @@
                 <i class="fa-solid fa-eye olho" onclick="mostrarSenha(this)"></i>
             </div>
 
-            <div class="options-row"> 
-                <label class="checkbox-container">
-                    <input type="checkbox" name="lembrar" value="1">
-                    Me lembrar
-                </label>
 
-                <a href="<?= base_url('esqueci-senha') ?>" class="forgot-password">Esqueci minha senha</a>
-            </div>
             
             <button type="submit" class="btn-submit">Entrar</button>
         </form>
