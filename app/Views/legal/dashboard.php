@@ -535,9 +535,6 @@
             <?php elseif ($perfil === 'gestão'): ?>
                 <h1>Olá, Gestão!</h1>
                 <p>Bem-vindo(a) ao painel de frequência. Aqui você pode acompanhar as presenças e faltas.</p>
-            <?php else: ?>
-                <h1>Olá, Liderança de Sala!</h1>
-                <p>Bem-vindo(a) ao painel de frequência da <?= htmlspecialchars($nome_turma_legivel ?? '') ?>.</p>
             <?php endif; ?>
         </div>
     </div>

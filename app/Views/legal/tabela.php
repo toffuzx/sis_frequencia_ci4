@@ -1,12 +1,9 @@
-<?php
-include 'conexao.php';
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações</title>
+    <title>Tabela de Justificativas</title>
     <link rel="icon" href="./logo_WR.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -132,12 +129,12 @@ include 'conexao.php';
 
     <div class="header">
         <div class="header-icon">
-            <i class="fa-solid fa-gear"></i>
+            <i class="fa-solid fa-table"></i>
         </div>
 
         <div class="header-text">
-            <h1>Configurações</h1>
-            <p>Gerencie opções do sistema e personalize sua conta.</p>
+            <h1>Tabela de Justificativas</h1>
+            <p>Visualize e gerencie as justificativas de ausência dos alunos.</p>
         </div>
     </div>
 

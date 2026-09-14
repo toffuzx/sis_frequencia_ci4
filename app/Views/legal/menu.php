@@ -145,7 +145,7 @@
     <div class="menu-items">
         <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
         <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
-        <a href="<?= base_url('Tabela') ?>"><i class="fa-solid fa-table"></i> Tabela de justificativas </a>
+        <a href="<?= base_url('tabela') ?>"><i class="fa-solid fa-table"></i> Tabela de justificativas </a>
     </div>
     <?php else: ?>
     <div class="menu-items">

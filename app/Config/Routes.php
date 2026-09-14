@@ -42,6 +42,7 @@ $routes->post('salvar_justificativa', 'Salvar_justificativa::salvar');
 $routes->post('salvar_justificativa_falta', 'Salvar_justificativa_falta::salvar');
 $routes->post('salvar_justificativa_falta', 'Salvar_justificativa_falta::salvar');
 $routes->get('download/atestado/(:num)', 'Download::atestado/$1');
+$routes->get('tabela', 'Tabela::index');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
