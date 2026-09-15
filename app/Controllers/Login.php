@@ -14,23 +14,28 @@ class Login extends BaseController
 
         return view('legal/login', $data);
 
+        if ($senhaCorreta) {
+    session()->set([
+        'isLoggedIn' => true,
+        'usuarioId'  => $usuario->id
+    ]);
+    return redirect()->to(base_url('dashboard'));
+}
     }
 
      public function logout()
     {
         // Inicia a sessão para poder acessá-la
-    session_start();
-
+    $session = session();
     // Limpa todas as variáveis da sessão
-    session_unset();
-
+    $session->remove('logado');
     // Destrói a sessão completamente
-    session_destroy();
+    $session->destroy();
     // Define os cabeçalhos para evitar cache do navegador  
     header("Cache-Control: no-cache, must-revalidate"); 
     header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
     // Redireciona o usuário de volta para a tela de login
-    header("Location: inicio.php");
+   return redirect()->to(base_url('inicio.php'));
     exit();
 
     }

@@ -555,7 +555,7 @@
                     <input type="date" name="data_busca" class="filter-input" value="<?= htmlspecialchars($data_filtro) ?>" max="<?= date('Y-m-d') ?>" onchange="document.getElementById('filtro-form').submit()" required>
 
                     <select name="turma_busca" class="filter-input" onchange="document.getElementById('filtro-form').submit()" required>
-                        <option value="" disabled <?= empty($turma_filtro) ? 'selected' : '' ?>>Selecionar Turma</option>
+                        <option value="" disabled hidden <?= empty($turma_filtro) ? 'selected' : '' ?>>Selecionar Turma</option>
                         <?php foreach ($todas_turmas as $t): ?>
                             <option value="<?= htmlspecialchars($t['id']) ?>" <?= ($turma_filtro == $t['id']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($t['serie'] . ' - ' . $t['nome']) ?>

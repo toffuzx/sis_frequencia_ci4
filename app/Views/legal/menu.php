@@ -126,7 +126,7 @@
 <div id="overlay-direito" class="overlay-menu" onclick="toggleMenuRight()"></div>
 
 <header class="topbar">
-    <a href="<?= base_url('logout') ?>" class="home-btn" title="Sair do sistema">
+    <a href="<?= base_url('login/logout') ?>" class="home-btn" title="Sair do sistema">
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
 

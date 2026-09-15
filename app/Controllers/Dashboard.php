@@ -10,7 +10,7 @@ class Dashboard extends BaseController
     {
          // 1. Verifica se está logado via Session do CI4
         if (!session()->get('logado')) {
-            return redirect()->to('/login');
+            return redirect()->to(base_url('/login'));
         }
 
         $data_filtro  = $this->request->getGet('data_busca') ?? date('Y-m-d');
