@@ -22,13 +22,13 @@ class Alterar_turma extends BaseController
         $turmaId = $this->request->getGet('selecionar_turma_id') ?? 0;
 
         // Processamento de ações POST
-        if ($this->request->getMethod() === 'POST') {
+        if ($this->request->getMethod() === 'post') {
             $acao = $this->request->getPost('acao');
             $turmaIdPost = $this->request->getPost('turma_id');
 
             if ($acao === 'adicionar_individual') {
                 $nome = trim($this->request->getPost('nome_aluno') ?? '');
-                if (!empty($nome)) {
+                if (!empty($nome) && !empty($turmaIdPost)) {
                     $alunoModel->insert([
                         'nome'     => mb_strtoupper($nome, 'UTF-8'),
                         'turma_id' => $turmaIdPost
