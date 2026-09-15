@@ -75,7 +75,7 @@ class Salvar_justificativa_falta extends BaseController
                 try {
                     $frequenciaModel->where('aluno_id', $alunoId)
                                     ->where('data_registro', $dataRegistro)
-                                    ->set(['status' => 'J'])
+                                    ->set(['aula_1' => 'J'])
                                     ->update();
                 } catch (\CodeIgniter\Database\Exceptions\DataException $e) {
                     // Ignora caso a frequência já esteja marcada com status 'J'

@@ -1,5 +1,5 @@
 <?php
-
+ echo "aura + j";
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -82,7 +82,7 @@
             eu mudei o texto
         </p>
         
-        <p class="ug"><strong>naoA</strong></p>
+        <p class="ug"><strong>Naoya</strong></p>
     </div>
 
 </body>

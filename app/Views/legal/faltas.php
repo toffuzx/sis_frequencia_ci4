@@ -76,7 +76,7 @@ if ($perfil_usuario === 'professor' || $perfil_usuario === 'gestão') {
             t.id AS turma_id,
             t.serie,
             t.nome AS nome_turma,
-            f.aula_1, f.aula_2, f.aula_3, f.aula_4, f.aula_5, f.aula_6, f.aula_7, f.aula_8, f.aula_9
+            f.aula_1,
         FROM frequencias f
         JOIN alunos a ON f.aluno_id = a.id
         JOIN turmas t ON a.turma_id = t.id

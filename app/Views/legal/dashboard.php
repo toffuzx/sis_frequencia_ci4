@@ -512,18 +512,15 @@
 
 <div class="container">
 
-    <!-- =====================================================
-         ALERTA DE SUCESSO
-    ====================================================== -->
+   
+         <!-- ALERTA DE SUCESSO -->
+ 
     <?php if (isset($_GET['sucesso'])): ?>
         <div class="alerta-sucesso">
             <i class="fa-solid fa-check-circle"></i> Frequência salva com sucesso!
         </div>
     <?php endif; ?>
 
-    <!-- =====================================================
-         SAUDAÇÃO
-    ====================================================== -->
     <div class="greeting-section">
         <div class="user-avatar">
             <i class="fa-solid fa-user"></i>
@@ -536,15 +533,13 @@
                 <h1>Olá, Gestão!</h1>
                 <p>Bem-vindo(a) ao painel de frequência. Aqui você pode acompanhar as presenças e faltas.</p>
             <?php else: ?>
-                <h1>Olá, Liderança de Sala!</h1>
-                <p>Bem-vindo(a) ao painel de frequência da <?= htmlspecialchars($nome_turma_legivel ?? '') ?>.</p>
+                <h1>Isso com certeza é um erro!</h1>
+                <p>Perfil não reconhecido.</p>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- =====================================================
-         CARD DO FILTRO
-    ====================================================== -->
+    <!-- CARD DO FILTRO -->
     <div class="info-cards-row">
         <div class="info-card white-bg" style="justify-content: space-between; width: 100%;">
             <div style="display:flex; align-items:center; gap:15px;">
@@ -573,9 +568,7 @@
         </div>
     </div>
 
-    <!-- =====================================================
-         TABELA
-    ====================================================== -->
+    <!-- TABELA -->
     <?php if ($mostrar_tabela): ?>
         <form id="form-frequencia" action="<?= base_url('salvar_frequencia') ?>" method="POST">
             <input type="hidden" name="data_registro" value="<?= htmlspecialchars($data_filtro) ?>">
@@ -670,9 +663,7 @@
 
 <?php include 'rodapelegal.php'; ?>
 
-<!-- =========================================================
-     MODAL DO PERFIL DO ALUNO
-========================================================== -->
+<!-- MODAL DO PERFIL DO ALUNO-->
 <div id="modal-aluno" class="modal-overlay">
     <div class="modal-aluno" role="dialog" aria-modal="true" aria-labelledby="modal-nome-aluno">
         <div class="modal-header">
@@ -725,10 +716,6 @@
         </div>
     </div>
 </div>
-
-<!-- =========================================================
-     MODAL - JUSTIFICAR FALTA / ATESTADO
-========================================================== -->
 <div id="modal-justificativa-falta" class="modal-overlay">
     <div class="modal-aluno" role="dialog" aria-modal="true">
         <div class="modal-header">
@@ -747,7 +734,7 @@
                 <div class="campo-modal">
                     <label class="titulo-campo" for="motivo">Motivo</label>
                     <select id="motivo" name="motivo" class="filter-input" style="width:100%;" required>
-                        <option value="">Selecionar motivo</option>
+                        <option value="" disabled selected hidden>Selecionar motivo</option>
                         <option value="Atestado médico">Atestado médico</option>
                         <option value="Compromisso escolar">Compromisso escolar</option>
                         <option value="Problema familiar">Problema familiar</option>
@@ -801,42 +788,42 @@ selectFalta.addEventListener('change', verificarMotivo);
         </form>
     </div>
 </div>
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================== -->
+<!-- JAVASCRIPT-->
 <script>
+    
 document.addEventListener('DOMContentLoaded', function () {
 
     // alternância de P/F (Professor) e Abertura de Justificativa (Gestão)
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
+
     botoesStatus.forEach(function (botao) {
         botao.addEventListener('click', function (event) {
+         
             event.preventDefault(); 
             event.stopPropagation();
             const perfilAtual = <?= json_encode($perfil) ?>;
             const statusAtual = this.textContent.trim();
             
-            if (perfilAtual === 'gestão') { 
-                abrirModalJustificativa(this); 
-                return; 
-            }
+           if (perfilAtual === 'gestão') { 
+    abrirModalJustificativa(this); 
+    return; 
+    
+}
 
             const alunoId = this.dataset.aluno;
             const aulaNum = this.dataset.aula;
             const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
-            if (!hiddenInput) return;
-
             if (statusAtual === 'P') {
                 this.textContent = 'F'; 
                 this.classList.remove('status-P'); 
-                this.classList.add('status-F'); 
+                this.classList.add('status-F' ); 
                 hiddenInput.value = 'F';
             } else if (statusAtual === 'F') {
                 this.textContent = 'P'; 
                 this.classList.remove('status-F'); 
                 this.classList.add('status-P'); 
                 hiddenInput.value = 'P';
+
             }
         });
     });
@@ -923,7 +910,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         .catch(erro => {
-            console.error('Erro ao salvar:', erro);
             alert('Erro ao salvar a justificativa.');
         });
     });
@@ -932,35 +918,113 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalJust = document.getElementById('modal-justificativa-falta');
     const formJust = document.getElementById('form-justificativa-falta');
     const btnSalvarJust = document.getElementById('btn-salvar-justificativa');
+    let botaoJustificativaAtual = null;
 
-    function abrirModalJustificativa(botao) {
-        const nome = document.querySelector('.nome-aluno[data-aluno="' + botao.dataset.aluno + '"]');
-        document.getElementById('justificativa-nome').textContent = nome ? nome.dataset.nome : 'Justificar falta';
-        document.getElementById('justificativa-data').textContent = 'Data: <?= htmlspecialchars($data_filtro) ?>';
-        document.getElementById('justificativa-aluno-id').value = botao.dataset.aluno;
-        document.getElementById('motivo').value = botao.dataset.motivo || '';
-        document.getElementById('observacoes-falta').value = botao.dataset.observacoes || '';
-        document.getElementById('atestado-arquivo').value = '';
-        document.getElementById('arquivo-existente').textContent = botao.dataset.arquivoNome ? 'Documento atual: ' + botao.dataset.arquivoNome : 'Nenhum documento anexado.';
-        
-        const linkArquivo = document.getElementById('arquivo-link');
-        const baseUrl = '<?= site_url('download/atestado') ?>';
-        linkArquivo.innerHTML = (botao.dataset.arquivoNome && botao.dataset.justificativaId) 
-            ? '<a href="' + baseUrl + '/' + encodeURIComponent(botao.dataset.justificativaId) + '" target="_blank"><i class="fa-solid fa-download"></i> Abrir / baixar documento</a>' 
-            : '';
+   function abrirModalJustificativa(botao) {
+    botaoJustificativaAtual = botao;
+    // BUSCA O ALUNO ANTES DE USAR A VARIÁVEL
+    const nomeAluno = document.querySelector(
+        '.nome-aluno[data-aluno="' + botao.dataset.aluno + '"]'
+    );
+    // LOCALIZA O MODAL
+    const modalJust = document.getElementById('modal-justificativa-falta');
 
-        const somenteVisualizacao = botao.textContent.trim() === 'J';
-        btnSalvarJust.style.display = somenteVisualizacao ? 'none' : '';
-        document.getElementById('motivo').disabled = somenteVisualizacao;
-        document.getElementById('observacoes-falta').disabled = somenteVisualizacao;
-        document.getElementById('atestado-arquivo').disabled = somenteVisualizacao;
+    if (!modalJust) {
 
-        modalJust.classList.add('aberto'); 
-        document.body.style.overflow = 'hidden';
-
-        verificarMotivo();
-      
+        return;
     }
+
+    // ==========================================
+    // PREENCHER DADOS DO ALUNO
+    // ==========================================
+    document.getElementById('justificativa-nome').textContent =
+        nomeAluno ? nomeAluno.dataset.nome : 'Justificar falta';
+
+    document.getElementById('justificativa-data').textContent =
+        'Data: <?= htmlspecialchars($data_filtro) ?>';
+
+    document.getElementById('justificativa-aluno-id').value =
+        botao.dataset.aluno || '';
+
+    // ==========================================
+    // PREENCHER JUSTIFICATIVA EXISTENTE
+    // ==========================================
+    document.getElementById('motivo').value =
+        botao.dataset.motivo || '';
+
+    document.getElementById('observacoes-falta').value =
+        botao.dataset.observacoes || '';
+
+    // Limpa novo arquivo
+    document.getElementById('atestado-arquivo').value = '';
+
+    // ==========================================
+    // DOCUMENTO EXISTENTE
+    // ==========================================
+    const arquivoExistente =
+        document.getElementById('arquivo-existente');
+
+    arquivoExistente.textContent =
+        botao.dataset.arquivoNome
+            ? 'Documento atual: ' + botao.dataset.arquivoNome
+            : 'Nenhum documento anexado.';
+
+    // ==========================================
+    // LINK DO DOCUMENTO
+    // ==========================================
+    const linkArquivo =
+        document.getElementById('arquivo-link');
+
+    const baseUrl =
+        '<?= site_url('download/atestado') ?>';
+
+    if (
+        botao.dataset.arquivoNome &&
+        botao.dataset.justificativaId
+    ) {
+        linkArquivo.innerHTML =
+            '<a href="' +
+            baseUrl +
+            '/' +
+            encodeURIComponent(botao.dataset.justificativaId) +
+            '" target="_blank">' +
+            '<i class="fa-solid fa-download"></i> ' +
+            'Abrir / baixar documento' +
+            '</a>';
+    } else {
+        linkArquivo.innerHTML = '';
+    }
+
+    // ==========================================
+    // VERIFICA SE É J OU F
+    // ==========================================
+    const somenteVisualizacao =
+        botao.textContent.trim() === 'J';
+
+    document.getElementById('btn-salvar-justificativa').style.display =
+        somenteVisualizacao ? 'none' : '';
+
+    document.getElementById('motivo').disabled =
+        somenteVisualizacao;
+
+    document.getElementById('observacoes-falta').disabled =
+        somenteVisualizacao;
+
+    document.getElementById('atestado-arquivo').disabled =
+        somenteVisualizacao;
+
+    // ABRE O MODAL
+    modalJust.classList.add('aberto');
+
+
+    document.body.style.overflow = 'hidden';
+
+    // VERIFICA O MOTIVO
+    verificarMotivo();
+
+}
+
+      
 
     function fecharModalJustificativa() { 
         modalJust.classList.remove('aberto'); 
@@ -971,32 +1035,81 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelar-modal-justificativa').addEventListener('click', fecharModalJustificativa);
     modalJust.addEventListener('click', function(e){ if(e.target === modalJust) fecharModalJustificativa(); });
 
-    formJust.addEventListener('submit', function(e){
-        e.preventDefault();
-        const fd = new FormData(formJust);
-        btnSalvarJust.disabled = true; 
-        btnSalvarJust.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+   formJust.addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        fetch('<?= site_url("salvar_justificativa_falta") ?>', { method: 'POST', body: fd })
-        .then(r => r.json())
-        .then(resultado => {
-            if (resultado.sucesso) {
-                alert(resultado.mensagem || 'Justificativa salva com sucesso.');
-                window.location.reload();
-            } else {
-                throw new Error(resultado.mensagem || 'Erro ao salvar.');
+    const fd = new FormData(formJust);
+
+    btnSalvarJust.disabled = true;
+    btnSalvarJust.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+    fetch('<?= site_url("salvar_justificativa_falta") ?>', {
+        method: 'POST',
+        body: fd
+    })
+    .then(async function(response) {
+        const texto = await response.text();
+        try {
+            return JSON.parse(texto);
+        } catch (erro) {
+            throw new Error('O servidor não retornou um JSON válido.');
+        }
+    })
+    .then(function(resultado) {
+
+        if (!resultado.sucesso) {
+            throw new Error(
+                resultado.mensagem || 'Erro ao salvar justificativa.'
+            );
+        }
+        // BOTÃO F -> J 
+        if (botaoJustificativaAtual) {
+            // Muda o texto
+            botaoJustificativaAtual.textContent = 'J';
+            botaoJustificativaAtual.classList.remove(
+                'status-F'
+            );
+            botaoJustificativaAtual.classList.add(
+                'status-J',
+                'justificativa-interactive',
+                'is-interactive'
+            );
+            const alunoId = botaoJustificativaAtual.dataset.aluno;
+            const aulaNum = botaoJustificativaAtual.dataset.aula;
+            const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
+            if (hiddenInput) {
+                hiddenInput.value = 'J';
             }
-        })
-        .catch(err => { 
-            alert(err.message); 
-            btnSalvarJust.disabled = false; 
-            btnSalvarJust.innerHTML = '<i class="fa-solid fa-check"></i> Salvar justificativa'; 
-        });
+            if (resultado.justificativa) {
+                botaoJustificativaAtual.dataset.justificativaId = resultado.justificativa.id || '';
+                botaoJustificativaAtual.dataset.motivo = resultado.justificativa.motivo || '';
+                botaoJustificativaAtual.dataset.observacoes = resultado.justificativa.observacoes || '';
+                botaoJustificativaAtual.dataset.arquivoNome = resultado.justificativa.arquivo_nome || '';
+                botaoJustificativaAtual.dataset.arquivoCaminho = resultado.justificativa.arquivo_caminho || '';
+            }
+        }
+        fecharModalJustificativa();
+       Swal.fire({
+    icon: 'success',
+    title: 'Sucesso!',
+    text: resultado.mensagem || 'Justificativa salva com sucesso.',
+    confirmButtonColor: '#3b8540'
+}).then(function () {
+    window.location.reload();
+});
+        btnSalvarJust.disabled = false;
+        btnSalvarJust.innerHTML =
+            '<i class="fa-solid fa-check"></i> Salvar justificativa';
+    })
+    .catch(function(err) {
+        alert(err.message);
+        btnSalvarJust.disabled = false;
+        btnSalvarJust.innerHTML = '<i class="fa-solid fa-check"></i> Salvar justificativa';
     });
-
+});
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 </html>
