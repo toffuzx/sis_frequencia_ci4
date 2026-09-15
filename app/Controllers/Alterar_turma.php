@@ -22,7 +22,7 @@ class Alterar_turma extends BaseController
         $turmaId = $this->request->getGet('selecionar_turma_id') ?? 0;
 
         // Processamento de ações POST
-        if ($this->request->getMethod() === 'POST') {
+        if ($this->request->getMethod() === 'post') {
             $acao = $this->request->getPost('acao');
             $turmaIdPost = $this->request->getPost('turma_id');
 
