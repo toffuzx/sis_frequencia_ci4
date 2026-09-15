@@ -131,7 +131,7 @@
     <?php endif; ?>
 
     <div class="links-footer">
-        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard</a>
+        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-arrow-left"></i> Voltar para frequência</a>
     </div>
 
 </div>

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Acesso Restrito</title>
-        <link rel="icon" href="./logo_WR.png" type="image/png">
+        <link rel="icon" href="<?= base_url('img/logo_WR.png') ?>" type="image/png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
             body { background: #f4f7f6; min-height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
