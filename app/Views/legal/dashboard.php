@@ -651,7 +651,7 @@
             </div>
         </form>
 
-    <?php elseif ($perfil === 'professor'): ?>
+    <?php elseif ($perfil === 'professor' || $perfil === 'gestão'): ?>
         <div style="text-align:center; padding:50px; color:#64748b;">
             <i class="fa-solid fa-list-check" style="font-size:40px; margin-bottom:15px; opacity:0.5;"></i>
             <h3>Nenhuma turma selecionada</h3>
