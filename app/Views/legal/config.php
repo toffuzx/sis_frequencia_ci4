@@ -1,13 +1,10 @@
-<?php
-include 'conexao.php';
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações</title>
-    <link rel="icon" href="./logo_WR.png" type="image/png">
+    <title>Tabela de Justificativas</title>
+    <link rel="icon" href=<?= base_url("img/logo_WR.png") ?> type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -132,32 +129,32 @@ include 'conexao.php';
 
     <div class="header">
         <div class="header-icon">
-            <i class="fa-solid fa-gear"></i>
+            <i class="fa-solid fa-user-gear"></i>
         </div>
 
         <div class="header-text">
             <h1>Configurações</h1>
-            <p>Gerencie opções do sistema e personalize sua conta.</p>
+            <p>Visualize e gerencie as configurações dos alunos.</p>
         </div>
     </div>
 
     <div class="settings-grid">
 
-        <a href="trocar_senha.php" class="setting-card">
+        <a href="<?= base_url('tabela') ?>" class="setting-card">
             <div class="setting-icon">
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-table"></i>
             </div>
 
             <div class="setting-title">
-                Trocar Senha
+                Tabela de Justificativas
             </div>
 
             <div class="setting-description">
-                Atualize sua senha de acesso para manter sua conta segura.
+                Visualize e gerencie as justificativas de ausência dos alunos.
             </div>
         </a>
 
-        <a href="alterar_turma.php" class="setting-card">
+        <a href="<?= base_url('alterar_turma') ?>" class="setting-card">
             <div class="setting-icon">
                 <i class="fa-solid fa-users"></i>
             </div>
