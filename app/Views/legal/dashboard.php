@@ -310,7 +310,7 @@
         }
 
         .modal-overlay.aberto { display: flex; }
-
+        
         .modal-aluno {
             width: 100%;
             max-width: 520px;
@@ -320,6 +320,7 @@
             border-radius: 18px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             animation: aparecerModal 0.2s ease;
+            
         }
 
         @keyframes aparecerModal {
@@ -346,9 +347,10 @@
             background: white;
             color: var(--primary-dark);
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 20px;
+            align-items: center;
+            font-size: 21px;
+            flex-shrink: 0;
         }
 
         .modal-header h2 { font-size: 18px; margin-bottom: 3px; }
