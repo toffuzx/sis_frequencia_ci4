@@ -532,12 +532,6 @@
             <?php elseif ($perfil === 'gestão'): ?>
                 <h1>Olá, Gestão!</h1>
                 <p>Bem-vindo(a) ao painel de frequência. Aqui você pode acompanhar as presenças e faltas.</p>
-<<<<<<< HEAD
-            <?php else: ?>
-                <h1>Isso com certeza é um erro!</h1>
-                <p>Perfil não reconhecido.</p>
-=======
->>>>>>> 1deeee59f8981058071a0e897f4be2169bb6a416
             <?php endif; ?>
         </div>
     </div>
