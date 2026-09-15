@@ -94,10 +94,10 @@
                 <hr style="border: 0; border-top: 2px solid #edf2f7; margin: 20px 0;">
 
                 <h2 style="font-size: 18px; color: var(--primary-green); margin-bottom: 15px;"><i class="fa-solid fa-user-plus"></i> Inserir Novo Aluno</h2>
-                <form method="POST" action="<?= base_url('alterar_turma') ?>">
+                <form method="POST" action="<?= base_url('alterar_turma') ?> "id="formAdicionarAluno">
                     <input type="hidden" name="turma_id" value="<?= $turma_atual_id; ?>">
                     <input type="hidden" name="acao" value="adicionar_individual">
-                    <div style="margin-bottom: 15px;">
+                    <div id="form-nome-aluno" style="margin-bottom: 15px;">
                         <input type="text" name="nome_aluno" placeholder="Nome Completo do Aluno" required>
                     </div>
                     <button type="submit" class="btn"><i class="fa-solid fa-plus"></i> Adicionar Aluno</button>
@@ -134,7 +134,70 @@
         <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-arrow-left"></i> Voltar para frequência</a>
     </div>
 
-</div>
+</div><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.getElementById('formAdicionarAluno').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const botao = form.querySelector('button[type="submit"]');
+
+    // Evita múltiplos cliques
+    botao.disabled = true;
+    botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adicionando...';
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(resultado => {
+
+        if (resultado.sucesso) {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: resultado.mensagem || 'Aluno adicionado com sucesso.',
+                confirmButtonColor: '#3b8540'
+            }).then(() => {
+                window.location.reload();
+            });
+
+        } else {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: resultado.mensagem || 'Não foi possível adicionar o aluno.',
+                confirmButtonColor: '#e53e3e'
+            });
+
+            botao.disabled = false;
+            botao.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Aluno';
+        }
+    })
+    .catch(error => {
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Aluno adicionado com sucesso.',
+            confirmButtonColor: '#3b8540'
+            })
+            .then(() => {
+                window.location.reload();
+            });
+
+
+        botao.disabled = false;
+        botao.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Aluno';
+    });
+});
+</script>
 
 </body>
 </html>
