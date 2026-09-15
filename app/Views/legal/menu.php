@@ -130,9 +130,12 @@
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
 
-    <a href="javascript:void(0)" id="btn-menu-direito" onclick="toggleMenuRight()" style="color: inherit; text-decoration: none;">
-        <i class="fa-solid fa-ellipsis-vertical" style="font-size: 20px; cursor: pointer;"></i>
-    </a>
+    <?php if ($perfil === 'gestão'): ?>
+        <a href="javascript:void(0)" id="btn-menu-direito" onclick="toggleMenuRight()" style="color: inherit; text-decoration: none;">
+            <i class="fa-solid fa-ellipsis-vertical" style="font-size: 20px; cursor: pointer;"></i>
+        </a>
+    <?php endif; ?>
+
 </header>
 
 <div id="sidebar-direito" class="sidebar-right">
@@ -141,18 +144,11 @@
     <div class="sidebar-header">
         <img src="<?= base_url('img/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
-    <?php if ($perfil === 'gestão'): ?>
     <div class="menu-items">
-        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
-        <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
-        <a href="<?= base_url('config') ?>"><i class="fa-solid fa-user-gear"></i> Configurações  </a>
+        <a href="<?= base_url('tabela') ?>"><i class="fa-solid fa-table"></i>Tabela de Justificativas</a>
+        <a href="<?= base_url('alterar_turma') ?>"><i class="fa-solid fa-users-gear"></i>Alterações de Turma</a>
+    <!-- <a href="<?= base_url('config') ?>"><i class="fa-solid fa-user-gear"></i> Configurações  </a> -->
     </div>
-    <?php else: ?>
-    <div class="menu-items">
-        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-chart-line"></i> Frequência</a>
-        <a href="<?= base_url('faltas') ?>"><i class="fa-solid fa-calendar-days"></i> Faltas por mês</a>
-    </div>
-    <?php endif; ?>
 </div>
 
 <script>
