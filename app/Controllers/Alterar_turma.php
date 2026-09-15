@@ -28,7 +28,7 @@ class Alterar_turma extends BaseController
 
             if ($acao === 'adicionar_individual') {
                 $nome = trim($this->request->getPost('nome_aluno') ?? '');
-                if (!empty($nome)) {
+                if (!empty($nome) && !empty($turmaIdPost)) {
                     $alunoModel->insert([
                         'nome'     => mb_strtoupper($nome, 'UTF-8'),
                         'turma_id' => $turmaIdPost
