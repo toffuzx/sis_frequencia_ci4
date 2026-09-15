@@ -13,9 +13,15 @@
         body{ background:var(--bg-light); min-height:100vh; padding:40px 20px; color:var(--text-dark); }
         .container { max-width: 900px; margin: 0 auto; }
         .card{ background:white; padding:35px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,.04); margin-bottom: 25px; }
+        select, input[type="text"], textarea { width: 100%; padding: 14px; font-size: 15px; border: 2px solid #e2e8f0; border-radius: 12px; outline: none; transition: .3s; background: #fff; }
+        select:focus, input:focus, textarea:focus { border-color: var(--primary-green); }
+        .lista-alunos { max-width: 900px; overflow-y: auto; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 15px; padding: 10px; }
+        .item-aluno { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #edf2f7; font-size: 14px; }
+        .item-aluno:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
+
     <div class="container">
      <div class="card">
         <form method="GET" action="<?= base_url('tabela') ?>" id="formTurma">
@@ -32,5 +38,21 @@
             </div>
         </form>
     </div>
+    
+    
+            <?php if ($turma_atual_id > 0): ?>
+                <div class="card">
+                    <div class="lista-alunos">
+                        <?php foreach ($alunos_turma_selecionada as $aluno): ?>
+                                    <div class="item-aluno">
+                                        <span><?= htmlspecialchars($aluno['nome']); ?></span>
+                                        <input type="hidden" name="turma_id" value="<?= $turma_atual_id; ?>">
+                                        <input type="hidden" name="aluno_id" value="<?= $aluno['id']; ?>">
+                                    </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        
 </body>
 </html>
