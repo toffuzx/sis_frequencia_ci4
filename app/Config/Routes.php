@@ -46,6 +46,7 @@ $routes->get('config', 'Config::index');
 $routes->get('tabela', 'Tabela::index');
 $routes->get('alterar_turma', 'Alterar_turma::index');
 $routes->post('alterar_turma', 'Alterar_turma::index');
+$routes->get('arquivo/atestado/(:num)', 'Arquivo::atestado/$1');
 
 /*
  * --------------------------------------------------------------------
