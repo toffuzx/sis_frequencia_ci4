@@ -44,14 +44,6 @@
         <h1>Gerenciamento de Alunos por Turma</h1>
     </div>
 
-    <?php if (session()->getFlashdata('erro')): ?>
-        <div class="alerta alerta-erro"><i class="fa-solid fa-circle-exclamation"></i> <?= session()->getFlashdata('erro') ?></div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('sucesso')): ?>
-        <div class="alerta alerta-sucesso"><i class="fa-solid fa-circle-check"></i> <?= session()->getFlashdata('sucesso') ?></div>
-    <?php endif; ?>
-
     <div class="card">
         <form method="GET" action="<?= base_url('alterar_turma') ?>" id="formTurma">
             <label for="selecionar_turma_id">Escolha a Turma que Deseja Alterar:</label>
@@ -136,68 +128,26 @@
 
 </div><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-document.getElementById('formAdicionarAluno').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const form = this;
-    const botao = form.querySelector('button[type="submit"]');
-
-    // Evita múltiplos cliques
-    botao.disabled = true;
-    botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adicionando...';
-
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(resultado => {
-
-        if (resultado.sucesso) {
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: resultado.mensagem || 'Aluno adicionado com sucesso.',
-                confirmButtonColor: '#3b8540'
-            }).then(() => {
-                window.location.reload();
-            });
-
-        } else {
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: resultado.mensagem || 'Não foi possível adicionar o aluno.',
-                confirmButtonColor: '#e53e3e'
-            });
-
-            botao.disabled = false;
-            botao.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Aluno';
-        }
-    })
-    .catch(error => {
-
+       <?php if (session()->getFlashdata('sucesso')): ?>
+    <script>
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
-            text: 'Aluno adicionado com sucesso.',
+            text: '<?= session()->getFlashdata('sucesso'); ?>',
             confirmButtonColor: '#3b8540'
-            })
-            .then(() => {
-                window.location.reload();
+        });
+    </script>
+    <?php elseif (session()->getFlashdata('erro')): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: '<?= session()->getFlashdata('erro') ?>',
+                confirmButtonColor: '#e53e3e'
             });
+        </script>
+    <?php endif; ?>
 
-
-        botao.disabled = false;
-        botao.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Aluno';
-    });
-});
-</script>
 
 </body>
 </html>

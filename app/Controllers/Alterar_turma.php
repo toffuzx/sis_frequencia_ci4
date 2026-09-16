@@ -34,6 +34,7 @@ class Alterar_turma extends BaseController
                         'turma_id' => $turmaIdPost
                     ]);
                     session()->setFlashdata('sucesso', 'Aluno adicionado com sucesso!');
+                    return redirect()->to(base_url('alterar_turma?selecionar_turma_id=' . $turmaIdPost));
                 } else {
                     session()->setFlashdata('erro', 'Digite o nome do aluno.');
                 }
