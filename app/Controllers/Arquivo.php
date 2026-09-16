@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use JustificativaFaltaModel;
+use App\Models\JustificativafaltaModel;
 
 class Arquivo extends BaseController
 {
     public function atestado($id)
     {
-        $model = new JustificativaFaltaModel();
+        $model = new JustificativafaltaModel();
         $justificativa = $model->find($id);
 
         if (!$justificativa || empty($justificativa['arquivo_caminho'])) {
-            return redirect()->back()->with('erro', 'Arquivo não encontrado.');
+            return $this->response->setStatusCode(404)->setBody('Arquivo não encontrado.');
         }
 
         $caminhoRelativo = $justificativa['arquivo_caminho'];
@@ -21,7 +21,7 @@ class Arquivo extends BaseController
         $caminhoCompleto = WRITEPATH . 'uploads/' . $caminhoRelativo;
 
         if (!file_exists($caminhoCompleto)) {
-            return redirect()->back()->with('erro', 'Arquivo não encontrado.');
+            return $this->response->setStatusCode(404)->setBody('Arquivo não encontrado.');
         }
 
         $mimeType = $justificativa['arquivo_tipo'] ?? mime_content_type($caminhoCompleto);

@@ -68,6 +68,8 @@
                             </div>
 
                             <div>
+
+                                
                                 <?php if (!empty($aluno['justificativa_id']) && !empty($aluno['motivo'] == 'Atestado médico')): ?>
                                     <button class="btn-ver" onclick="abrirDocumento('<?= base_url('arquivo/atestado/' . $aluno['justificativa_id']); ?>' , '<?= htmlspecialchars($aluno['aluno_nome'], ENT_QUOTES); ?>')">
                                         <i class="fa-solid fa-eye"></i> Ver Justificativa
@@ -89,6 +91,7 @@
             window.open(url, '_blank');
         }
     }
+</script>
 
 </body>
 </html>

@@ -39,7 +39,7 @@ class Tabela extends BaseController
                 jf.arquivo_caminho
             ");
             // Frequência 'F' (Falta) no mês/ano atual
-            $builder->join('frequencias f', "f.aluno_id = a.id AND f.aula_1 = 'F' AND MONTH(f.data_registro) = {$mesAtual} AND YEAR(f.data_registro) = {$anoAtual}", 'left');
+            $builder->join('frequencias f', "f.aluno_id = a.id AND f.aula_1 IN('F', 'J') AND MONTH(f.data_registro) = {$mesAtual} AND YEAR(f.data_registro) = {$anoAtual}", 'left');
             // Anexa as justificativas de faltas se existirem
             $builder->join('justificativas_faltas jf', 'jf.aluno_id = a.id', 'left');
             $builder->where('a.turma_id', $turmaId);
