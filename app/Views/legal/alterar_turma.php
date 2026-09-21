@@ -1,3 +1,6 @@
+<?php
+$perfil = session()->get('perfil');
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -36,6 +39,8 @@
     </style>
 </head>
 <body>
+
+    <?php include 'menu.php'; ?>
 
 <div class="container">
 
@@ -122,9 +127,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="links-footer">
-        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-arrow-left"></i> Voltar para frequência</a>
-    </div>
+    <?php include 'rodapelegal.php'; ?>
 
 </div><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -147,7 +150,6 @@
             });
         </script>
     <?php endif; ?>
-
 
 </body>
 </html>

@@ -1,3 +1,6 @@
+<?php
+    $perfil = session()->get('perfil');
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -138,6 +141,8 @@
 </head>
 <body>
 
+    <?php include 'menu.php'; ?>
+
     <div class="container">
         <div class="page-title-section">
             <h2 style="color: #1b3322;">Faltas da Escola (Gestão)</h2>
@@ -185,7 +190,7 @@
                 <table class="tabela-faltas">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th></th>
                             <th>Turma</th>
                             <th>Faltas reais</th>
                             <th>Percentual de faltas</th>
@@ -325,7 +330,7 @@
                                                     
                                                     <?php if (!empty($aluno['motivo'])): ?>
                                                         <div class="motivo-texto">
-                                                            <i class="fa-solid fa-circle-info" style="font-size: 10px; color: var(--primary-green); background: none; padding: 0;"></i>
+                                                            <i class="" style="font-size: 10px; color: var(--primary-green); background: none; padding: 0;"></i>
                                                             Motivo: <?= esc($aluno['motivo']); ?>
                                                         </div>
                                                     <?php endif; ?>
@@ -370,6 +375,8 @@
         <?php endif; ?>
 
     </div>
+
+    <?php include 'rodapelegal.php'; ?>
 
     <script>
         function atualizarFiltros() {
