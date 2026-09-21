@@ -15,6 +15,7 @@
            VARIÁVEIS
         ===================================================== */
         :root {
+            --primary-red: #f01616;
             --primary-dark: #1a4331;
             --primary-green: #3b8540;
             --bg-light: #f4f7f6;
@@ -458,6 +459,17 @@
         }
 
         .btn-confirmar:hover { background: #2c6b30; }
+          .btn-excluir {
+            border: none;
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-excluir:hover { background: #c93131; }
 
         .arquivo-input { width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px; background:#fff; font-size:14px; }
         .arquivo-info { margin-top:8px; font-size:13px; color:var(--text-gray); }
@@ -534,7 +546,8 @@
             <?php elseif ($perfil === 'gestão'): ?>
                 <h1>Olá, Gestão!</h1>
                 <p>Bem-vindo(a) ao painel de frequência. Aqui você pode acompanhar as presenças e faltas.</p>
-            <?php endif; ?>
+                
+                <?php endif; ?>
         </div>
     </div>
 
@@ -616,6 +629,7 @@
                                                 } elseif ($perfil === 'gestão' && in_array($status, ['F','J'], true)) {
                                                     echo 'is-interactive justificativa-interactive';
                                                 }
+                                               
                                             ?>"
                                             data-aluno="<?= htmlspecialchars($aluno['id'] ?? '') ?>"
                                             data-aula="<?= htmlspecialchars($numero_aula) ?>"
@@ -673,9 +687,7 @@
                     <p>Perfil de frequência</p>
                 </div>
             </div>
-            <button type="button" class="btn-fechar-modal" id="fechar-modal" aria-label="Fechar">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+                
         </div>
 
         <div class="modal-body">
@@ -710,6 +722,7 @@
         <div class="modal-footer">
             <button type="button" class="btn-cancelar" id="cancelar-modal">Fechar</button>
             <button type="button" class="btn-confirmar" id="salvar-perfil-aluno">
+                
                 <i class="fa-solid fa-check"></i> Marcar
             </button>
         </div>
@@ -722,7 +735,7 @@
                 <div class="modal-avatar"><i class="fa-solid fa-user"></i></div>
                 <div><h2 id="justificativa-nome">Justificar falta</h2><p id="justificativa-data">-</p></div>
             </div>
-            <button type="button" class="btn-fechar-modal" id="fechar-modal-justificativa"><i class="fa-solid fa-xmark"></i></button>
+           
         </div>
         <form id="form-justificativa-falta" enctype="multipart/form-data">
             <div class="modal-body">
@@ -781,7 +794,8 @@ selectFalta.addEventListener('change', verificarMotivo);
 </script>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">Fechar</button>
+                  <button type="button" class="btn-excluir" id="excluir-modal-justificativa">excluir</button>
+                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">fechar</button>
                 <button type="submit" class="btn-confirmar" id="btn-salvar-justificativa"><i class="fa-solid fa-check"></i> Salvar justificativa</button>
             </div>
         </form>
@@ -829,12 +843,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Modal de perfil do aluno
     const modal = document.getElementById('modal-aluno');
-    const fecharModal = document.getElementById('fechar-modal');
+    const excluirModal = document.getElementById('excluir-modal');
     const cancelarModal = document.getElementById('cancelar-modal');
     const nomeModal = document.getElementById('modal-nome-aluno');
     const nomeDisplay = document.getElementById('modal-nome-display');
     const dataModal = document.getElementById('modal-data');
     const observacoes = document.getElementById('observacoes-aluno');
+
 
     document.querySelectorAll('.nome-aluno').forEach(function (nome) {
         nome.addEventListener('click', function (event) {
@@ -867,7 +882,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = '';
     }
 
-    fecharModal.addEventListener('click', fecharJanelaAluno);
     cancelarModal.addEventListener('click', fecharJanelaAluno);
 
     modal.addEventListener('click', function (event) {
@@ -920,11 +934,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let botaoJustificativaAtual = null;
 
    function abrirModalJustificativa(botao) {
+    
     botaoJustificativaAtual = botao;
     // BUSCA O ALUNO ANTES DE USAR A VARIÁVEL
+    
     const nomeAluno = document.querySelector(
         '.nome-aluno[data-aluno="' + botao.dataset.aluno + '"]'
     );
+    
     // LOCALIZA O MODAL
     const modalJust = document.getElementById('modal-justificativa-falta');
 
@@ -932,10 +949,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return;
     }
-
-    // ==========================================
-    // PREENCHER DADOS DO ALUNO
-    // ==========================================
+    
     document.getElementById('justificativa-nome').textContent =
         nomeAluno ? nomeAluno.dataset.nome : 'Justificar falta';
 
@@ -945,9 +959,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('justificativa-aluno-id').value =
         botao.dataset.aluno || '';
 
-    // ==========================================
-    // PREENCHER JUSTIFICATIVA EXISTENTE
-    // ==========================================
     document.getElementById('motivo').value =
         botao.dataset.motivo || '';
 
@@ -997,29 +1008,28 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================
     // VERIFICA SE É J OU F
     // ==========================================
-    const somenteVisualizacao =
-        botao.textContent.trim() === 'J';
+    
+  const statusAtual = botao.textContent.trim();
+    const somenteVisualizacao = (statusAtual === 'J');
 
     document.getElementById('btn-salvar-justificativa').style.display =
         somenteVisualizacao ? 'none' : '';
 
-    document.getElementById('motivo').disabled =
-        somenteVisualizacao;
+    document.getElementById('motivo').disabled = somenteVisualizacao;
+    document.getElementById('observacoes-falta').disabled = somenteVisualizacao;
+    document.getElementById('atestado-arquivo').disabled = somenteVisualizacao;
 
-    document.getElementById('observacoes-falta').disabled =
-        somenteVisualizacao;
-
-    document.getElementById('atestado-arquivo').disabled =
-        somenteVisualizacao;
+    // Controla a visibilidade do botão excluir (só aparece se for J)
+    const btnExcluir = document.getElementById('excluir-modal-justificativa');
+    if (btnExcluir) {
+        btnExcluir.style.display = (statusAtual === 'J') ? 'inline-block' : 'none';
+    }
 
     // ABRE O MODAL
     modalJust.classList.add('aberto');
-
-
     document.body.style.overflow = 'hidden';
 
-    // VERIFICA O MOTIVO
-    verificarMotivo();
+    verificarMotiv();
 
 }
 
@@ -1029,11 +1039,81 @@ document.addEventListener('DOMContentLoaded', function () {
         modalJust.classList.remove('aberto'); 
         document.body.style.overflow = ''; 
     }
+   function excluirModalJustificativa() {
+     modalJust.classList.remove('aberto'); 
+        document.body.style.overflow = ''; 
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Deseja realmente remover esta justificativa?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                const alunoId = document.getElementById('justificativa-aluno-id').value;
+                const dataRegistro = "<?= htmlspecialchars($data_filtro) ?>";
 
-    document.getElementById('fechar-modal-justificativa').addEventListener('click', fecharModalJustificativa);
+                fetch('<?= site_url("excluir_justificativa") ?>', {
+                    method: 'POST',
+                    headers: {  'Content-Type': 'application/json','X-Requested-With': 'XMLHttpRequest'  },
+                    body: JSON.stringify({
+                    aluno_id: alunoId,
+                    data_registro: dataRegistro
+                    })
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(resultado) {
+                    if (resultado.sucesso) {
+                        if (botaoJustificativaAtual) {
+                            botaoJustificativaAtual.textContent = 'F';
+                            botaoJustificativaAtual.classList.remove('status-J');
+                            botaoJustificativaAtual.classList.add('status-F');
+                            
+                            const alunoId = botaoJustificativaAtual.dataset.aluno;
+                            const aulaNum = botaoJustificativaAtual.dataset.aula;
+                            const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
+                            if (hiddenInput) {
+                                hiddenInput.value = 'F';
+                            }
+                            
+                            botaoJustificativaAtual.dataset.justificativaId = '';
+                            botaoJustificativaAtual.dataset.motivo = '';
+                            botaoJustificativaAtual.dataset.observacoes = '';
+                            botaoJustificativaAtual.dataset.arquivoNome = '';
+                            botaoJustificativaAtual.dataset.arquivoCaminho = '';
+                        }
+
+                        modalJust.classList.remove('aberto');
+                        document.body.style.overflow = '';
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Excluído!',
+                            text: resultado.mensagem || 'Justificativa removida com sucesso.',
+                            confirmButtonColor: '#3b8540'
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    } else  {
+                        Swal.fire('Erro', resultado.mensagem || 'Não foi possível excluir.', 'error');
+                    }
+                })
+                .catch(function() {
+                    Swal.fire('Erro', 'Erro ao executar a ação.', 'error');
+                });
+            }
+        });
+    }
+
     document.getElementById('cancelar-modal-justificativa').addEventListener('click', fecharModalJustificativa);
-    modalJust.addEventListener('click', function(e){ if(e.target === modalJust) fecharModalJustificativa(); });
+    document.getElementById('excluir-modal-justificativa').addEventListener('click', excluirModalJustificativa);
 
+  
    formJust.addEventListener('submit', function(e) {
     e.preventDefault();
 

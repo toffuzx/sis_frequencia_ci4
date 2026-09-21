@@ -117,5 +117,54 @@ class Dashboard extends BaseController
 
         return view('legal/dashboard', $dataView);
     }
+    public function excluir_justificativa()
+   {
+    
+    // Garante que é uma requisição via AJAX/Fetch
+    if (!$this->request->isAJAX()) {
+        return $this->response->setJSON(['sucesso' => false, 'mensagem' => 'Acesso inválido.']);
+    }
+
+    $db = \Config\Database::connect();
+    
+    // Pega os dados enviados pelo JSON do Fetch
+    $json = $this->request->getJSON(true);
+    $alunoId = $json['aluno_id'] ?? null;
+    $dataRegistro = $json['data_registro'] ?? null;
+
+    if (!$alunoId || !$dataRegistro) {
+        return $this->response->setJSON([
+            'sucesso' => false, 
+            'mensagem' => 'Erro ao excluir.'
+        ]);
+    }
+
+    try {
+        $dadosExcluidos =[
+        'aula_1' => 'F',
+
+        ];
+        
+        $db->table('frequencias')
+           ->where('aluno_id', $alunoId)
+           ->where('data_registro', $dataRegistro)
+           ->update($dadosExcluidos);
+        $db->table('justificativas_faltas')
+           ->where('aluno_id', $alunoId)
+           ->where('data_registro', $dataRegistro)
+           ->delete();
+
+        return $this->response->setJSON([
+            'sucesso' => true,
+            'mensagem' => 'Justificativa excluída com sucesso!'
+        ]);
+
+    } catch (\Exception $e) {
+        return $this->response->setJSON([
+            'sucesso' => false,
+            'mensagem' => 'Erro no banco de dados: ' . $e->getMessage()
+        ]);
+    }
+}
 }
 
