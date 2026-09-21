@@ -12,10 +12,10 @@ class Tabela extends BaseController
     public function index()
     {
         $session = session();
-        $perfilUsuario = $session->get('perfil');
+        $perfil = $session->get('perfil');
 
         // Apenas Gestão tem permissão de acesso
-        if ($perfilUsuario !== 'gestão' && $perfilUsuario !== 'gestao') {
+        if ($perfil !== 'gestão' && $perfil !== 'gestao') {
             return view('errors/html/acesso_restrito');
         }
 
@@ -191,6 +191,7 @@ class Tabela extends BaseController
                 ->where('a.turma_id', $turmaId)
                 ->orderBy('a.nome', 'ASC');
 
+
             $listaAlunos = $builderAlunos->get()->getResultArray();
 
             foreach ($listaAlunos as $aluno) {
@@ -237,12 +238,13 @@ class Tabela extends BaseController
         $anoExibicao = substr($mesSelecionado, 0, 4);
 
         $data = [
+           
             'mes_selecionado'               => $mesSelecionado,
             'opcoes_meses'                  => $opcoesMeses,
             'lista_turmas_escola'           => $listaTurmasEscola,
             'turma_id'                      => $turmaId,
             'nome_turma'                    => $nomeTurma,
-            'perfil_usuario'                => $perfilUsuario,
+            'perfil_usuario'                => $perfil,
             'mostrar_conteudo'              => $mostrarConteudo,
             'ranking_turmas_faltas'         => $rankingTurmasFaltas,
             'total_faltas_turma'            => $totalFaltasTurma,

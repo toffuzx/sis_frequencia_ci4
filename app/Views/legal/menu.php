@@ -145,9 +145,10 @@
         <img src="<?= base_url('img/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
     <div class="menu-items">
+        
+        <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-house"></i>Frequência</a>
         <a href="<?= base_url('tabela') ?>"><i class="fa-solid fa-table"></i>Tabela de Justificativas</a>
         <a href="<?= base_url('alterar_turma') ?>"><i class="fa-solid fa-users-gear"></i>Alterações de Turma</a>
-    <!-- <a href="<?= base_url('config') ?>"><i class="fa-solid fa-user-gear"></i> Configurações  </a> -->
     </div>
 </div>
 
