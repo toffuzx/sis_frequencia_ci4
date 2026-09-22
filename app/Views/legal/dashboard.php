@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 
     <style>
-        /* =====================================================
-           VARIÁVEIS
-        ===================================================== */
+       
         :root {
             --primary-red: #f01616;
             --primary-dark: #1a4331;
@@ -48,6 +46,7 @@
             background-color: var(--bg-light);
             min-height: 100vh;
         }
+        
 
         /* =====================================================
            CONTAINER
@@ -695,12 +694,11 @@
                 <label class="titulo-campo">Aluno</label>
                 <div id="modal-nome-display" class="data-perfil">-</div>
             </div>
-
+          
             <div class="campo-modal">
                 <label class="titulo-campo">Data da frequência</label>
                 <div id="modal-data" class="data-perfil"><?= htmlspecialchars($data_filtro) ?></div>
             </div>
-
             <div class="campo-modal">
                 <label class="titulo-campo">Justificativas</label>
                 <label class="check-item">
@@ -792,7 +790,32 @@ function verificarMotivo() {
 // Monitora se o usuário mudar a opção manualmente clicando na tela
 selectFalta.addEventListener('change', verificarMotivo);
 
+document.addEventListener('DOMContentLoaded', function () {
+    const alunos = document.querySelectorAll('.nome-aluno');
 
+    alunos.forEach(function (alunoEl) {
+        const idAluno = alunoEl.getAttribute('data-aluno');
+        const atrasado = alunoEl.getAttribute('data-atrasado') === '1';
+        const fardamento = alunoEl.getAttribute('data-fardamento') === '1';
+        const observacoes = (alunoEl.getAttribute('data-observacoes') || '').trim();
+
+        // Condição: verifica se existe qualquer dado salvo
+        const TemF = fardamento;
+        const TemO = observacoes !== '';
+        const TemA = atrasado;
+
+
+        if (TemA) {
+            alunoEl.innerHTML += ' <i class= "fa-solid fa-user-clock " title="Atrasado"></i>';
+        }
+        if (TemF) {
+            alunoEl.innerHTML += ' <i class="fa-solid fa-user-xmark " title="justificativa"></i>';
+        }
+        if (TemO) {
+            alunoEl.innerHTML += ' <i class= "fa-solid fa-user-pen  " title="Possui observações"></i>';
+        }
+    });
+});
 </script>
             </div>
             <div class="modal-footer">
@@ -855,43 +878,69 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             event.stopPropagation();
 
-            const alunoId = this.getAttribute('data-aluno');
-            const nomeAluno = this.getAttribute('data-nome');
+           const perfilAtual = <?= json_encode($perfil) ?>;
+        const alunoId = this.getAttribute('data-aluno');
 
-            modal.setAttribute('data-aluno', alunoId);
-            nomeModal.textContent = nomeAluno;
-            nomeDisplay.textContent = nomeAluno;
-            dataModal.textContent = "<?= htmlspecialchars($data_filtro) ?>";
-
-            const atrasadoSalvo = this.getAttribute('data-atrasado') === '1';
-            const fardamentoSalvo = this.getAttribute('data-fardamento') === '1';
-            const observacoesSalvas = this.getAttribute('data-observacoes') || '';
-
-            const inputAtrasado = document.querySelector('input[name="justificativa_atrasado"]');
-            const inputFardamento = document.querySelector('input[name="justificativa_fardamento"]');
-            const btnSalvarPerfil = document.getElementById('salvar-perfil-aluno');
-            const perfilAtual = <?= json_encode($perfil) ?>;
-
-            if (inputAtrasado) inputAtrasado.checked = atrasadoSalvo;
-            if (inputFardamento) inputFardamento.checked = fardamentoSalvo;
-            if (observacoes) observacoes.value = observacoesSalvas;
-
-            if (perfilAtual === 'gestão') {
-                if (inputAtrasado) inputAtrasado.disabled = true;
-                if (inputFardamento) inputFardamento.disabled = true;
-                if (observacoes) observacoes.disabled = true;
-                if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'none';
-            } else if (perfilAtual === 'professor') {
-                if (inputAtrasado) inputAtrasado.disabled = false;
-                if (inputFardamento) inputFardamento.disabled = false;
-                if (observacoes) observacoes.disabled = false;
-                if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'inline-flex';
-                if (btnExcluirFreq) btnExcluirFreq.style.display = 'none';
+        // Busca os badges de status das aulas deste aluno
+        const badgesAluno = document.querySelectorAll('.aula-badge[data-aluno="' + alunoId + '"]');
+        
+        // Verifica se alguma das aulas do aluno está marcada como 'F'
+        let possuiFalta = false;
+        badgesAluno.forEach(function (badge) {
+            if (badge.textContent.trim() === 'F') {
+                possuiFalta = true;
             }
-
-            modal.classList.add('aberto');
-            document.body.style.overflow = 'hidden';
         });
+
+        // Se for professor e o aluno tiver 'F', impede a abertura do modal
+        if (perfilAtual === 'professor' && possuiFalta) {
+            Swal.fire({
+        icon: 'info',
+        title: 'Atenção',
+        text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
+        confirmButtonColor: '#3b8540',
+        confirmButtonText: 'Entendido'
+    });
+    return;
+        
+        }
+
+        // --- Código normal de abertura do modal abaixo ---
+        const nomeAluno = this.getAttribute('data-nome');
+
+        modal.setAttribute('data-aluno', alunoId);
+        nomeModal.textContent = nomeAluno;
+        nomeDisplay.textContent = nomeAluno;
+        dataModal.textContent = "<?= htmlspecialchars($data_filtro) ?>";
+
+        const atrasadoSalvo = this.getAttribute('data-atrasado') === '1';
+        const fardamentoSalvo = this.getAttribute('data-fardamento') === '1';
+        const observacoesSalvas = this.getAttribute('data-observacoes') || '';
+
+        const inputAtrasado = document.querySelector('input[name="justificativa_atrasado"]');
+        const inputFardamento = document.querySelector('input[name="justificativa_fardamento"]');
+        const btnSalvarPerfil = document.getElementById('salvar-perfil-aluno');
+
+        if (inputAtrasado) inputAtrasado.checked = atrasadoSalvo;
+        if (inputFardamento) inputFardamento.checked = fardamentoSalvo;
+        if (observacoes) observacoes.value = observacoesSalvas;
+
+        if (perfilAtual === 'gestão') {
+            if (inputAtrasado) inputAtrasado.disabled = true;
+            if (inputFardamento) inputFardamento.disabled = true;
+            if (observacoes) observacoes.disabled = true;
+            if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'none';
+        } else if (perfilAtual === 'professor') {
+            if (inputAtrasado) inputAtrasado.disabled = false;
+            if (inputFardamento) inputFardamento.disabled = false;
+            if (observacoes) observacoes.disabled = false;
+            if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'inline-flex';
+            if (btnExcluirFreq) btnExcluirFreq.style.display = 'none';
+        }
+
+        modal.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    });
     });
 
     function fecharJanelaAluno() {
