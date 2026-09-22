@@ -31,5 +31,9 @@ class Arquivo extends BaseController
             ->setHeader('Content-Type', $mimeType)
             ->setHeader('Content-Disposition', 'inline; filename="' . $nomeOriginal . '"')
             ->setBody(file_get_contents($caminhoCompleto));
+
+            
     }
+
+    
 }

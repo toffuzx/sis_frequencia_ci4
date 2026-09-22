@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faltas por Mês - <?= esc($nome_turma); ?></title>
-    <link rel="icon" href="<?= base_url('logo_WR.png'); ?>" type="image/png">
+    <link rel="icon" href="<?= base_url('img/logo_WR.png'); ?>" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -105,6 +105,22 @@
 
         .aluno-nome-col { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
         .aluno-nome-col i { color: var(--primary-dark); background: #e8f0e9; padding: 6px; border-radius: 50%; font-size: 12px; margin-top: 2px; }
+        .aluno-nome { font-size: 18px;}
+        .aluno-nome { cursor: pointer; transition: 0.2s;}
+        .aluno-nome:hover { color: var(--primary-green); text-decoration: underline; }
+
+
+        .campo-modal-justificativa { margin-bottom: 20px; }
+
+        .campo-modal-justificativa label.titulo-campo {
+            display: block;
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        
 
         .badge-falta-tabela {
             background: #fce4e4; color: var(--error-red);
@@ -320,13 +336,22 @@
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php foreach ($tabela_alunos_justificados as$aluno): ?>
+                                <?php foreach ($tabela_alunos_justificados as $aluno): ?>
                                     <tr>
                                         <td>
                                             <div class="aluno-nome-col">
                                                 <i class="fa-solid fa-user"></i>
                                                 <div>
-                                                    <strong><?= esc($aluno['nome']); ?></strong>
+
+                                                    <span class="aluno-nome"
+                                                        data-nome="<?= esc($aluno['nome']); ?>"
+                                                        data-aluno="<?= esc($aluno['id']); ?>"
+                                                        data-justificativa="<?= esc($aluno['motivo']); ?>"
+                                                        data-observacoes="<?= esc($aluno['observacoes']); ?>"
+                                                        data-arquivo-nome="<?= esc($aluno['arquivo_nome']); ?>"
+                                                        >
+                                                      <?= esc($aluno['nome']); ?>
+                                                    </span>
                                                     
                                                     <?php if (!empty($aluno['motivo'])): ?>
                                                         <div class="motivo-texto">
@@ -349,6 +374,9 @@
                                             </span>
                                         </td>
                                         <td>
+                                            <!-- modal de ver justificativas -->
+
+
                                             <?php if (!empty($aluno['arquivo_caminho']) || !empty($aluno['arquivo_nome'])): ?>
                                                 <a href="<?= base_url('arquivo/atestado/' . $aluno['justificativa_id']); ?>" target="_blank" class="btn-ver">
                                                     <i class="fa-solid fa-eye"></i> Ver
@@ -379,6 +407,7 @@
     <?php include 'rodapelegal.php'; ?>
 
     <script>
+
         function atualizarFiltros() {
             const mes = document.getElementById('select-mes').value;
             const selectTurma = document.getElementById('select-turma');
@@ -445,6 +474,54 @@
                 }
             });
         }
+
+        const modal = document.getElementById('modal-aluno');
+        const excluirModal = document.getElementById('excluir-modal');
+        const cancelarModal = document.getElementById('cancelar-modal');
+        const nomeModal = document.getElementById('modal-aluno-nome');
+        const nomeDisplay = document.getElementById('modal-nome-display');
+        const dataModal = document.getElementById('modal-data');
+        
+
+
+        document.querySelectorAll('.aluno-nome').forEach(function (nome) {
+            nome.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const alunoId = this.getAttribute('data-aluno');
+                const nomeAluno = this.getAttribute('data-nome');
+
+                modal.setAttribute('data-aluno', alunoId);
+                nomeModal.textContent = nomeAluno;
+                nomeDisplay.textContent = nomeAluno;
+
+                
+                observacoes.value = observacoesSalvas;
+
+                modal.classList.add('aberto');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function fecharJanelaAluno() {
+        modal.classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    cancelarModal.addEventListener('click', fecharJanelaAluno);
+
+    modal.addEventListener('click', function (event) {
+        if (event.target === modal) fecharJanelaAluno();
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && modal.classList.contains('aberto')) fecharJanelaAluno();
+    });
+
+    
+
+        
     </script>
 </body>
 </html>
