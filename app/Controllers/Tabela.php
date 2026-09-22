@@ -195,40 +195,50 @@ class Tabela extends BaseController
             $listaAlunos = $builderAlunos->get()->getResultArray();
 
             foreach ($listaAlunos as $aluno) {
-                $faltasAluno = 0;
+                $faltasSemJustificativas = 0;
+                $faltasJustificadas = 0;
                 $totalAulasAluno = 0;
+                
 
                 foreach ($frequenciasMes as $f) {
                     if ($f['aluno_id'] == $aluno['id']) {
                         if (!empty($f['aula_1'])) {
                             $totalAulasAluno++;
-                            if (in_array($f['aula_1'], ['F', 'J'])) {
-                                $faltasAluno++;
+                            if ($f['aula_1'] === 'F') {
+                                $faltasSemJustificativas++;
+                            } else if ($f['aula_1'] === 'J') {
+                                $faltasJustificadas++;
                             }
                         }
                     }
                 }
 
-                if ($faltasAluno > 0) {
-                    $percA = $totalAulasAluno > 0 ? round(($faltasAluno / $totalAulasAluno) * 100, 0) : 0;
-                    $itemAluno = [
+                if ($faltasSemJustificativas > 0) {
+                    $percA = $totalAulasAluno > 0 ? round(($faltasSemJustificativas / $totalAulasAluno) * 100, 0) : 0;
+                    $tabelaAlunosSemJustificativa[] = [
                         'id'               => $aluno['id'],
                         'nome'             => $aluno['nome'],
-                        'faltas_reais'     => $faltasAluno,
+                        'faltas_reais'     => $faltasSemJustificativas,
+                        'percentual'       => $percA,
+                    ];
+
+                }
+
+                if ($faltasJustificadas > 0) {
+                $percA = $totalAulasAluno > 0 ? round(($faltasJustificadas / $totalAulasAluno) * 100, 0) : 0;
+                $tabelaAlunosJustificados[] = [
+                        'id'               => $aluno['id'],
+                        'nome'             => $aluno['nome'],
+                        'faltas_reais'     => $faltasJustificadas,
                         'percentual'       => $percA,
                         'justificativa_id' => $aluno['justificativa_id'],
                         'motivo'           => $aluno['motivo'],
                         'observacoes'      => $aluno['observacoes'],
                         'arquivo_nome'     => $aluno['arquivo_nome'],
                         'arquivo_caminho'  => $aluno['arquivo_caminho']
-                    ];
+                ];
 
-                    // Qualquer aluno com registro de justificativa vai para a tabela de justificados
-                    if (!empty($aluno['justificativa_id'])) {
-                        $tabelaAlunosJustificados[] = $itemAluno;
-                    } else {
-                        $tabelaAlunosSemJustificativa[] = $itemAluno;
-                    }
+                 
                 }
             }
         }
@@ -261,4 +271,6 @@ class Tabela extends BaseController
 
         return view('legal/tabela', $data);
     }
+
+
 }
