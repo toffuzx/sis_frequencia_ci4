@@ -773,14 +773,13 @@ function salvarStatusTemporario(alunoId, aulaNum, status) {
 
 // Ao carregar a página, você recupera e aplica aos botões:
 document.addEventListener('DOMContentLoaded', function () {
+    const perfilAtual = <?= json_encode($perfil) ?>;
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
-
+    if perfilAtual === professor{
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
         const chave = `freq_${alunoId}_aula_${aulaNum}`;
-        
-
         const statusSalvo = sessionStorage.getItem(chave);
         
         if (statusSalvo) {
@@ -792,7 +791,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
             if (hiddenInput) hiddenInput.value = statusSalvo;
         }
-
+    }
         
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
@@ -1197,10 +1196,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
+                             showCancelButton: false,
+                        showConfirmButton: false,
                             icon: 'success',
                             title: 'Excluído!',
-                            text: resultado.mensagem || 'Frequência removida com sucesso.',
-                            confirmButtonColor: '#3b8540'
+                             timer: 900,
+                             
                         }).then(() => window.location.reload());
                     } else {
                         Swal.fire('Erro', resultado.mensagem || 'Não foi possível excluir.', 'error');
