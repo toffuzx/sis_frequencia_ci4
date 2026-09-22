@@ -186,7 +186,7 @@
                 </select>
 
                 <select id="select-turma" onchange="atualizarFiltros()">
-                    <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>>-- Selecione uma Turma --</option>
+                    <option value="0" disabled hidden <?= empty($turma_id) ? 'selected' : '' ?>> Selecione uma Turma </option>
                     <?php foreach ($lista_turmas_escola as$t): ?>
                         <option value="<?= $t['id'] ?>" <?= ($turma_id ==$t['id']) ? 'selected' : ''; ?>>
                             <?= esc($t['serie'] . ' ' .$t['nome']) ?>

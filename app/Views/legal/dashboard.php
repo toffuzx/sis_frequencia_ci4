@@ -795,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     alunos.forEach(function (alunoEl) {
         const idAluno = alunoEl.getAttribute('data-aluno');
-        const atrasado = alunoEl.getAttribute('data-atrasado') === '1';
+        const atrasado = alunoEl.getAttribute('d  ata-atrasado') === '1';
         const fardamento = alunoEl.getAttribute('data-fardamento') === '1';
         const observacoes = (alunoEl.getAttribute('data-observacoes') || '').trim();
 
