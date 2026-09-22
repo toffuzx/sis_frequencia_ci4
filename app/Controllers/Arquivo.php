@@ -18,7 +18,7 @@ class Arquivo extends BaseController
         $caminhoRelativo = $justificativa['arquivo_caminho'];
         $nomeArquivoFisico = basename($caminhoRelativo);
 
-        $caminhoCompleto = WRITEPATH . 'uploads/' . $caminhoRelativo;
+        $caminhoCompleto = WRITEPATH . $caminhoRelativo;
 
         if (!file_exists($caminhoCompleto)) {
             return $this->response->setStatusCode(404)->setBody('Arquivo não encontrado.');
