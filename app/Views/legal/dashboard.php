@@ -765,6 +765,41 @@
                 </div>
                 
 <script>
+// Exemplo de salvamento ao alterar a aula/botão
+function salvarStatusTemporario(alunoId, aulaNum, status) {
+    const chave = `freq_${alunoId}_aula_${aulaNum}`;
+    sessionStorage.setItem(chave, status);
+}
+
+// Ao carregar a página, você recupera e aplica aos botões:
+document.addEventListener('DOMContentLoaded', function () {
+    const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
+
+    botoesStatus.forEach(function (botao) {
+        const alunoId = botao.dataset.aluno;
+        const aulaNum = botao.dataset.aula;
+        const chave = `freq_${alunoId}_aula_${aulaNum}`;
+        
+
+        const statusSalvo = sessionStorage.getItem(chave);
+        
+        if (statusSalvo) {
+            botao.textContent = statusSalvo;
+            botao.classList.remove('status-P', 'status-F');
+            botao.classList.add('status-' + statusSalvo);
+            
+         
+            const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
+            if (hiddenInput) hiddenInput.value = statusSalvo;
+        }
+
+        
+        botao.addEventListener('click', function () {
+            const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
+            salvarStatusTemporario(alunoId, aulaNum, novoStatus);
+        });
+    });
+});
 const selectFalta = document.getElementById('motivo');
 const blocoExtra = document.getElementById('atestado-campo');
 const inputArquivo = document.getElementById('atestado-arquivo');
@@ -865,108 +900,152 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 2. Modal de perfil / frequência do aluno
+    // 2. Interceptação do envio da frequência (Alerta SweetAlert)
+    const formFrequencia = document.getElementById('form-frequencia');
+    if (formFrequencia) {
+        formFrequencia.addEventListener('submit', function (event) {
+            let possuiJustificativaOuFalta = false;
+            const alunos = document.querySelectorAll('.nome-aluno');
+
+            alunos.forEach(function (alunoEl) {
+                const idAluno = alunoEl.getAttribute('data-aluno');
+                const atrasado = alunoEl.getAttribute('data-atrasado') === '1';
+                const fardamento = alunoEl.getAttribute('data-fardamento') === '1';
+                const observacoes = (alunoEl.getAttribute('data-observacoes') || '').trim();
+
+                let temFalta = false;
+                const badgesAluno = document.querySelectorAll(`.aula-badge[data-aluno="${idAluno}"]`);
+                badgesAluno.forEach(function (badge) {
+                    if (badge.textContent.trim() === 'F') {
+                        temFalta = true;
+                         const temRegistro = fardamento || atrasado || observacoes !== '' && temFalta;
+
+                if (temRegistro) {
+                    possuiJustificativaOuFalta = true;
+                }
+                    }
+                });
+            });
+
+            if (possuiJustificativaOuFalta) {
+                event.preventDefault(); // Interrompe o envio para mostrar o Swal
+
+                Swal.fire({
+                    title: 'Atenção!',
+                    text: 'Existem alunos com falta e marcação',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3b8540',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, enviar!',
+                    cancelButtonText: 'Revisar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formFrequencia.submit();
+                    }
+                });
+            }
+        });
+    }
+
+    // 3. Modal de perfil / frequência do aluno
     const modal = document.getElementById('modal-aluno');
     const cancelarModal = document.getElementById('cancelar-modal');
     const nomeModal = document.getElementById('modal-nome-aluno');
     const nomeDisplay = document.getElementById('modal-nome-display');
     const dataModal = document.getElementById('modal-data');
     const observacoes = document.getElementById('observacoes-aluno');
+    const btnExcluirFreq = document.getElementById('excluir-modal-frequencia');
 
     document.querySelectorAll('.nome-aluno').forEach(function (nome) {
         nome.addEventListener('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
-           const perfilAtual = <?= json_encode($perfil) ?>;
-        const alunoId = this.getAttribute('data-aluno');
+            const perfilAtual = <?= json_encode($perfil) ?>;
+            const alunoId = this.getAttribute('data-aluno');
 
-        // Busca os badges de status das aulas deste aluno
-        const badgesAluno = document.querySelectorAll('.aula-badge[data-aluno="' + alunoId + '"]');
-        
-        // Verifica se alguma das aulas do aluno está marcada como 'F'
-        let possuiFalta = false;
-        badgesAluno.forEach(function (badge) {
-            if (badge.textContent.trim() === 'F') {
-                possuiFalta = true;
+            const badgesAluno = document.querySelectorAll('.aula-badge[data-aluno="' + alunoId + '"]');
+            let possuiFalta = false;
+            badgesAluno.forEach(function (badge) {
+                if (badge.textContent.trim() === 'F') {
+                    possuiFalta = true;
+                }
+            });
+
+            if (perfilAtual === 'professor' && possuiFalta) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Atenção',
+                    text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
+                    confirmButtonColor: '#3b8540',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
+
+            const nomeAluno = this.getAttribute('data-nome');
+
+            if (modal) modal.setAttribute('data-aluno', alunoId);
+            if (nomeModal) nomeModal.textContent = nomeAluno;
+            if (nomeDisplay) nomeDisplay.textContent = nomeAluno;
+            if (dataModal) dataModal.textContent = "<?= htmlspecialchars($data_filtro) ?>";
+
+            const atrasadoSalvo = this.getAttribute('data-atrasado') === '1';
+            const fardamentoSalvo = this.getAttribute('data-fardamento') === '1';
+            const observacoesSalvas = this.getAttribute('data-observacoes') || '';
+
+            const inputAtrasado = document.querySelector('input[name="justificativa_atrasado"]');
+            const inputFardamento = document.querySelector('input[name="justificativa_fardamento"]');
+            const btnSalvarPerfil = document.getElementById('salvar-perfil-aluno');
+
+            if (inputAtrasado) inputAtrasado.checked = atrasadoSalvo;
+            if (inputFardamento) inputFardamento.checked = fardamentoSalvo;
+            if (observacoes) observacoes.value = observacoesSalvas;
+
+            if (perfilAtual === 'gestão') {
+                if (inputAtrasado) inputAtrasado.disabled = true;
+                if (inputFardamento) inputFardamento.disabled = true;
+                if (observacoes) observacoes.disabled = true;
+                if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'none';
+            } else if (perfilAtual === 'professor') {
+                if (inputAtrasado) inputAtrasado.disabled = false;
+                if (inputFardamento) inputFardamento.disabled = false;
+                if (observacoes) observacoes.disabled = false;
+                if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'inline-flex';
+                if (btnExcluirFreq) btnExcluirFreq.style.display = 'none';
+            }
+
+            if (modal) modal.classList.add('aberto');
+            document.body.style.overflow = 'hidden';
         });
-
-        // Se for professor e o aluno tiver 'F', impede a abertura do modal
-        if (perfilAtual === 'professor' && possuiFalta) {
-            Swal.fire({
-        icon: 'info',
-        title: 'Atenção',
-        text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
-        confirmButtonColor: '#3b8540',
-        confirmButtonText: 'Entendido'
-    });
-    return;
-        
-        }
-
-        // --- Código normal de abertura do modal abaixo ---
-        const nomeAluno = this.getAttribute('data-nome');
-
-        modal.setAttribute('data-aluno', alunoId);
-        nomeModal.textContent = nomeAluno;
-        nomeDisplay.textContent = nomeAluno;
-        dataModal.textContent = "<?= htmlspecialchars($data_filtro) ?>";
-
-        const atrasadoSalvo = this.getAttribute('data-atrasado') === '1';
-        const fardamentoSalvo = this.getAttribute('data-fardamento') === '1';
-        const observacoesSalvas = this.getAttribute('data-observacoes') || '';
-
-        const inputAtrasado = document.querySelector('input[name="justificativa_atrasado"]');
-        const inputFardamento = document.querySelector('input[name="justificativa_fardamento"]');
-        const btnSalvarPerfil = document.getElementById('salvar-perfil-aluno');
-
-        if (inputAtrasado) inputAtrasado.checked = atrasadoSalvo;
-        if (inputFardamento) inputFardamento.checked = fardamentoSalvo;
-        if (observacoes) observacoes.value = observacoesSalvas;
-
-        if (perfilAtual === 'gestão') {
-            if (inputAtrasado) inputAtrasado.disabled = true;
-            if (inputFardamento) inputFardamento.disabled = true;
-            if (observacoes) observacoes.disabled = true;
-            if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'none';
-        } else if (perfilAtual === 'professor') {
-            if (inputAtrasado) inputAtrasado.disabled = false;
-            if (inputFardamento) inputFardamento.disabled = false;
-            if (observacoes) observacoes.disabled = false;
-            if (btnSalvarPerfil) btnSalvarPerfil.style.display = 'inline-flex';
-            if (btnExcluirFreq) btnExcluirFreq.style.display = 'none';
-        }
-
-        modal.classList.add('aberto');
-        document.body.style.overflow = 'hidden';
-    });
     });
 
     function fecharJanelaAluno() {
-        modal.classList.remove('aberto');
+        if (modal) modal.classList.remove('aberto');
         document.body.style.overflow = '';
     }
 
     if (cancelarModal) cancelarModal.addEventListener('click', fecharJanelaAluno);
 
-    modal.addEventListener('click', function (event) {
-        if (event.target === modal) fecharJanelaAluno();
-    });
+    if (modal) {
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal) fecharJanelaAluno();
+        });
+    }
 
     document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && modal.classList.contains('aberto')) fecharJanelaAluno();
+        if (event.key === 'Escape' && modal && modal.classList.contains('aberto')) fecharJanelaAluno();
     });
 
     // Gravar justificativa do Perfil
     const btnMarcar = document.getElementById('salvar-perfil-aluno');
     if (btnMarcar) {
-
         btnMarcar.addEventListener('click', function () {
             const alunoId = modal.getAttribute('data-aluno');
             const atrasado = document.querySelector('input[name="justificativa_atrasado"]').checked;
             const fardamento = document.querySelector('input[name="justificativa_fardamento"]').checked;
-            const texto = observacoes.value.trim();
+            const texto = observacoes ? observacoes.value.trim() : '';
 
             fetch('<?= site_url("salvar_justificativa") ?>', {
                 method: 'POST',
@@ -983,12 +1062,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(resultado => {
                 if (resultado.sucesso) {
                     fecharJanelaAluno();
-                     Swal.fire({
-                            icon: 'success',
-                            title: 'Sucesso!',
-                            text: resultado.mensagem || 'Justificativa adicionada com sucesso.',
-                            confirmButtonColor: '#3b8540'
-                        }).then(() => window.location.reload());
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: resultado.mensagem || 'Justificativa adicionada com sucesso.',
+                        confirmButtonColor: '#3b8540'
+                    }).then(() => window.location.reload());
                 } else {
                     alert(resultado.mensagem || 'Erro ao salvar justificativa.');
                 }
@@ -997,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 3. Modal - Gestão (Faltas / Atestados)
+    // 4. Modal - Gestão (Faltas / Atestados)
     const modalJust = document.getElementById('modal-justificativa-falta');
     const formJust = document.getElementById('form-justificativa-falta');
     const btnSalvarJust = document.getElementById('btn-salvar-justificativa');
@@ -1050,13 +1129,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function fecharModalJustificativa() { 
-        modalJust.classList.remove('aberto'); 
+        if (modalJust) modalJust.classList.remove('aberto'); 
         document.body.style.overflow = ''; 
     }
 
     function excluirModalJustificativa() {
-        modalJust.classList.remove('aberto'); 
-        document.body.style.overflow = ''; 
+        fecharModalJustificativa(); 
         Swal.fire({
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta justificativa?",
@@ -1133,10 +1211,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Vinculação de eventos dos botões dos modais
+    // Vinculação de eventos
     const btnCancelarJust = document.getElementById('cancelar-modal-justificativa');
     const btnExcluirJust = document.getElementById('excluir-modal-justificativa');
-    const btnExcluirFreq = document.getElementById('excluir-modal-frequencia');
 
     if (btnCancelarJust) btnCancelarJust.addEventListener('click', fecharModalJustificativa);
     if (btnExcluirJust) btnExcluirJust.addEventListener('click', excluirModalJustificativa);
