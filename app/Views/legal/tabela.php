@@ -105,9 +105,9 @@
 
         .aluno-nome-col { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
         .aluno-nome-col i { color: var(--primary-dark); background: #e8f0e9; padding: 6px; border-radius: 50%; font-size: 12px; margin-top: 2px; }
-        .aluno-nome { font-size: 18px;}
-        .aluno-nome { cursor: pointer; transition: 0.2s;}
-        .aluno-nome:hover { color: var(--primary-green); text-decoration: underline; }
+        .nome-aluno-modal { font-size: 18px;}
+        .nome-aluno-modal { cursor: pointer; transition: 0.2s;}
+        .nome-aluno-modal:hover { color: var(--primary-green); text-decoration: underline; }
 
 
         .campo-modal-justificativa { margin-bottom: 20px; }
@@ -153,6 +153,38 @@
             .cards-grid { flex-direction: column; }
             .tables-grid { flex-direction: column; }
         }
+
+        /* Modal de justificativas */
+
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-aluno {
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            animation: aparecerModal 0.2s ease;
+            
+        }
+
+        @keyframes aparecerModal {
+            from { opacity: 0; transform: translateY(15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
     </style>
 </head>
 <body>
@@ -161,7 +193,7 @@
 
     <div class="container">
         <div class="page-title-section">
-            <h2 style="color: #1b3322;">Faltas da Escola (Gestão)</h2>
+            <h2 style="color: #1b3322;">Faltas da Escola</h2>
             <p style="color: #666; font-size: 14px;">Controle e comparativo de frequência por turma e aluno</p>
         </div>
 
@@ -186,7 +218,7 @@
                 </select>
 
                 <select id="select-turma" onchange="atualizarFiltros()">
-                    <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>>-- Selecione uma Turma --</option>
+                    <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>></option>
                     <?php foreach ($lista_turmas_escola as$t): ?>
                         <option value="<?= $t['id'] ?>" <?= ($turma_id ==$t['id']) ? 'selected' : ''; ?>>
                             <?= esc($t['serie'] . ' ' .$t['nome']) ?>
@@ -246,7 +278,7 @@
         <?php endif; ?>
 
         <?php if ($mostrar_conteudo): ?>
-
+            
             <div class="cards-grid">
                 <div class="card-resumo">
                     <div class="badge-numero"><?= str_pad($total_faltas_turma, 2, "0", STR_PAD_LEFT); ?></div>
@@ -343,7 +375,7 @@
                                                 <i class="fa-solid fa-user"></i>
                                                 <div>
 
-                                                    <span class="aluno-nome"
+                                                    <span class="nome-aluno-modal"
                                                         data-nome="<?= esc($aluno['nome']); ?>"
                                                         data-aluno="<?= esc($aluno['id']); ?>"
                                                         data-justificativa="<?= esc($aluno['motivo']); ?>"
@@ -374,9 +406,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <!-- modal de ver justificativas -->
-
-
+                            
                                             <?php if (!empty($aluno['arquivo_caminho']) || !empty($aluno['arquivo_nome'])): ?>
                                                 <a href="<?= base_url('arquivo/atestado/' . $aluno['justificativa_id']); ?>" target="_blank" class="btn-ver">
                                                     <i class="fa-solid fa-eye"></i> Ver
@@ -405,6 +435,23 @@
     </div>
 
     <?php include 'rodapelegal.php'; ?>
+
+       <!-- modal de ver justificativas -->
+
+                                            <div id="modal-aluno" class="modal-overlay">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <span id="cancelar-modal" class="close">&times;</span>
+                                                        <h3>Detalhes das Justificativas <span id="nome-aluno-modal"></span></h3>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>Motivo:</strong> <span id="modal-motivo"></span></p>
+                                                        <p><strong>Observações:</strong> <span id="modal-observacoes"></span></p>
+                                                        <p><strong>Anexo:</strong> <span id="modal-anexo"></span></p>
+                                                    </div>
+                                                </div>
+
+    
 
     <script>
 
@@ -478,13 +525,13 @@
         const modal = document.getElementById('modal-aluno');
         const excluirModal = document.getElementById('excluir-modal');
         const cancelarModal = document.getElementById('cancelar-modal');
-        const nomeModal = document.getElementById('modal-aluno-nome');
+        const nomeModal = document.getElementById('nome-aluno-modal');
         const nomeDisplay = document.getElementById('modal-nome-display');
         const dataModal = document.getElementById('modal-data');
         
 
 
-        document.querySelectorAll('.aluno-nome').forEach(function (nome) {
+        document.querySelectorAll('.nome-aluno-modal').forEach(function (nome) {
             nome.addEventListener('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
