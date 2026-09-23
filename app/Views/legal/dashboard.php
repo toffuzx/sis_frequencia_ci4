@@ -723,7 +723,7 @@
                 
                 <i class="fa-solid fa-check"></i> Marcar
             </button>
-            <button type="button" class="btn-excluir" id="excluir-modal-frequencia">Excluir</button>
+            <button type="button" class="btn-excluir" id="excluir-modal-frequencia">excluir</button>
         </div>
     </div>
 </div>
@@ -766,21 +766,20 @@
                 
 <script>
 // Exemplo de salvamento ao alterar a aula/botão
-function salvarStatusTemporario(data, alunoId, aulaNum, status) {
-    const chave = `freq_${data}_${alunoId}_aula_${aulaNum}`;
+function salvarStatusTemporario(alunoId, aulaNum, status) {
+    const chave = `freq_${alunoId}_aula_${aulaNum}`;
     sessionStorage.setItem(chave, status);
 }
 
 // Ao carregar a página, você recupera e aplica aos botões:
 document.addEventListener('DOMContentLoaded', function () {
     const perfilAtual = <?= json_encode($perfil) ?>;
-    const dataFiltro = "<?= htmlspecialchars($data_filtro) ?>";
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
     if (perfilAtual === 'professor'){
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
-        const chave = `freq_${dataFiltro}_${alunoId}_aula_${aulaNum}`;
+        const chave = `freq_${alunoId}_aula_${aulaNum}`;
         const statusSalvo = sessionStorage.getItem(chave);
         
         if (statusSalvo) {
@@ -794,7 +793,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }   
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
-            salvarStatusTemporario(dataFiltro, alunoId, aulaNum, novoStatus);
+            salvarStatusTemporario(alunoId, aulaNum, novoStatus);
         });
     });
     }
@@ -853,8 +852,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
             </div>
             <div class="modal-footer">
-                  <button type="button" class="btn-excluir" id="excluir-modal-justificativa">Excluir</button>
-                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">Fechar</button>
+                  <button type="button" class="btn-excluir" id="excluir-modal-justificativa">excluir</button>
+                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">fechar</button>
                 <button type="submit" class="btn-confirmar" id="btn-salvar-justificativa"><i class="fa-solid fa-check"></i> Salvar justificativa</button>
             </div>
         </form>
@@ -928,6 +927,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault(); // Interrompe o envio para mostrar o Swal
 
                 Swal.fire({
+                    width: 350,
                     title: 'Atenção!',
                     text: 'Existem alunos com falta e marcação',
                     icon: 'warning',
@@ -972,6 +972,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (perfilAtual === 'professor' && possuiFalta) {
                 Swal.fire({
+                    width: 350,
                     icon: 'info',
                     title: 'Atenção',
                     text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
@@ -1060,6 +1061,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (resultado.sucesso) {
                     fecharJanelaAluno();
                     Swal.fire({
+                        width: 350,
                         icon: 'success',
                         title: 'Sucesso!',
                         text: resultado.mensagem || 'Justificativa adicionada com sucesso.',
@@ -1133,6 +1135,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalJustificativa() {
         fecharModalJustificativa(); 
         Swal.fire({
+            width: 350,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta justificativa?",
             icon: 'warning',
@@ -1155,6 +1158,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
+                            width: 350,
                             icon: 'success',
                             title: 'Excluído!',
                             text: resultado.mensagem || 'Justificativa removida com sucesso.',
@@ -1172,6 +1176,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalFrequencia() {
         fecharJanelaAluno();
         Swal.fire({
+            width: 350,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta marcação?",
             icon: 'warning',
@@ -1194,6 +1199,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
+                            width: 350,
                              showCancelButton: false,
                         showConfirmButton: false,
                             icon: 'success',
@@ -1241,6 +1247,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 fecharModalJustificativa();
                 Swal.fire({
+                    width: 350,
                     icon: 'success',
                     title: 'Sucesso!',
                     text: resultado.mensagem || 'Justificativa salva com sucesso.',
