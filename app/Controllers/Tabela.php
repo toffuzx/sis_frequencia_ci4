@@ -186,8 +186,7 @@ class Tabela extends BaseController
 
             // Lista de Alunos
             $builderAlunos = $db->table('alunos a')
-                ->select('a.id, a.nome, jf.id AS justificativa_id, jf.motivo, jf.observacoes, jf.arquivo_nome, jf.arquivo_caminho')
-                ->join('justificativas_faltas jf', 'jf.aluno_id = a.id', 'left')
+                ->select('a.id, a.nome')
                 ->where('a.turma_id', $turmaId)
                 ->orderBy('a.nome', 'ASC');
 
@@ -226,16 +225,23 @@ class Tabela extends BaseController
 
                 if ($faltasJustificadas > 0) {
                 $percA = $totalAulasAluno > 0 ? round(($faltasJustificadas / $totalAulasAluno) * 100, 0) : 0;
+
+                $justificativa = $db->table('justificativas_faltas')
+                    ->where('aluno_id', $aluno['id'])
+                    ->orderBy('id', 'DESC')
+                    ->get()
+                    ->getRowArray();
+
                 $tabelaAlunosJustificados[] = [
                         'id'               => $aluno['id'],
                         'nome'             => $aluno['nome'],
                         'faltas_reais'     => $faltasJustificadas,
                         'percentual'       => $percA,
-                        'justificativa_id' => $aluno['justificativa_id'],
-                        'motivo'           => $aluno['motivo'],
-                        'observacoes'      => $aluno['observacoes'],
-                        'arquivo_nome'     => $aluno['arquivo_nome'],
-                        'arquivo_caminho'  => $aluno['arquivo_caminho']
+                        'justificativa_id' => $justificativa['id'] ?? null,
+                        'motivo'           => $justificativa['motivo'] ?? '',
+                        'observacoes'      => $justificativa['observacoes'] ?? '',
+                        'arquivo_nome'     => $justificativa['arquivo_nome'] ?? '',
+                        'arquivo_caminho'  => $justificativa['arquivo_caminho'] ?? ''
                 ];
 
                  
