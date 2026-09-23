@@ -161,6 +161,7 @@
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sair',
+        cancelButtonText: 'cancelar',
         cancelButtonColor: '#3b8540',
         confirmButtonColor: '#d33',
         }).then((result) => {
