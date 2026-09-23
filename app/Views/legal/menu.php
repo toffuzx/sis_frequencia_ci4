@@ -153,58 +153,6 @@
 </div>
 
 <script>
-   document.getElementById('btn-logout').addEventListener('click', function(e) {
-    e.preventDefault(); 
-    const urlLogout = this.href;
-    Swal.fire({
-        title: 'Deseja realmente sair?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sair',
-        cancelButtonText: 'cancelar',
-        cancelButtonColor: '#3b8540',
-        confirmButtonColor: '#d33',
-        }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = urlLogout;
-    }
-    });
-     });
-
-    const urlAtual = window.location.pathname;
-if(urlAtual === '/dashboard'){
-document.querySelector('a[href*="dashboard"]').addEventListener('click', function(e) {
-      Swal.fire({
-                    title: 'Ops!',
-                    text: 'Você já se encontra nesta tela.',
-                    icon: 'warning',
-                    showConfirmButton: false,
-                    timer: 1100
-    })
-      e.preventDefault();});
-}
-if(urlAtual === '/alterar_turma'){
-document.querySelector('a[href*="alterar_turma"]').addEventListener('click', function(e) {
-    Swal.fire({
-                    title: 'Ops!',
-                    text: 'Você já se encontra nesta tela.',
-                    icon: 'warning',
-                    showConfirmButton: false,
-                    timer: 1300
-    })
-    e.preventDefault();});
-    }
-if(urlAtual === '/tabela'){
-document.querySelector('a[href*="tabela"]').addEventListener('click', function(e) {
-    Swal.fire({
-                    title: 'Ops!',
-                    text: 'Você já se encontra nesta tela.',
-                    icon: 'warning',
-                    showConfirmButton: false,
-                    timer: 1300
-    })
-    e.preventDefault();});
-    }
     function toggleMenuRight() {
         const sidebar = document.getElementById("sidebar-direito");
         const overlay = document.getElementById("overlay-direito");
