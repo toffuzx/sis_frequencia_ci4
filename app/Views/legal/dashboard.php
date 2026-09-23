@@ -723,7 +723,7 @@
                 
                 <i class="fa-solid fa-check"></i> Marcar
             </button>
-            <button type="button" class="btn-excluir" id="excluir-modal-frequencia">excluir</button>
+            <button type="button" class="btn-excluir" id="excluir-modal-frequencia">Excluir</button>
         </div>
     </div>
 </div>
@@ -853,8 +853,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
             </div>
             <div class="modal-footer">
-                  <button type="button" class="btn-excluir" id="excluir-modal-justificativa">excluir</button>
-                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">fechar</button>
+                  <button type="button" class="btn-excluir" id="excluir-modal-justificativa">Excluir</button>
+                <button type="button" class="btn-cancelar" id="cancelar-modal-justificativa">Fechar</button>
                 <button type="submit" class="btn-confirmar" id="btn-salvar-justificativa"><i class="fa-solid fa-check"></i> Salvar justificativa</button>
             </div>
         </form>
