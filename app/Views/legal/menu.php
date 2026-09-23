@@ -98,6 +98,7 @@
         margin-right: 10px;
         width: 20px;
         text-align: center;
+        margin-bottom: 7px;
     }
     .menu-items a:hover {
         background-color: rgba(255, 255, 255, 0.1);
@@ -145,7 +146,6 @@
         <img src="<?= base_url('img/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
     <div class="menu-items">
-        
         <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-house"></i>Frequência</a>
         <a href="<?= base_url('tabela') ?>"><i class="fa-solid fa-table"></i>Tabela de Justificativas</a>
         <a href="<?= base_url('alterar_turma') ?>"><i class="fa-solid fa-users-gear"></i>Alterações de Turma</a>
@@ -153,6 +153,40 @@
 </div>
 
 <script>
+    const urlAtual = window.location.pathname;
+if(urlAtual === '/dashboard'){
+document.querySelector('a[href*="dashboard"]').addEventListener('click', function(e) {
+      Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1100
+    })
+      e.preventDefault();});
+}
+if(urlAtual === '/alterar_turma'){
+document.querySelector('a[href*="alterar_turma"]').addEventListener('click', function(e) {
+    Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1300
+    })
+    e.preventDefault();});
+    }
+if(urlAtual === '/tabela'){
+document.querySelector('a[href*="tabela"]').addEventListener('click', function(e) {
+    Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1300
+    })
+    e.preventDefault();});
+    }
     function toggleMenuRight() {
         const sidebar = document.getElementById("sidebar-direito");
         const overlay = document.getElementById("overlay-direito");
@@ -160,3 +194,4 @@
         overlay.classList.toggle("active");
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
