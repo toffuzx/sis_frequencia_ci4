@@ -774,12 +774,13 @@ function salvarStatusTemporario(alunoId, aulaNum, status) {
 // Ao carregar a página, você recupera e aplica aos botões:
 document.addEventListener('DOMContentLoaded', function () {
     const perfilAtual = <?= json_encode($perfil) ?>;
+    const dataFiltro = "<?= htmlspecialchars($data_filtro) ?>";
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
     if (perfilAtual === 'professor'){
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
-        const chave = `freq_${alunoId}_aula_${aulaNum}`;
+        const chave = `freq_${dataFiltro}_${alunoId}_aula_${aulaNum}`;
         const statusSalvo = sessionStorage.getItem(chave);
         
         if (statusSalvo) {
