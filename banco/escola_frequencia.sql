@@ -590,7 +590,6 @@ CREATE TABLE `frequencias` (
 -- Extraindo dados da tabela `frequencias`
 --
 
-INSERT INTO `frequencias` (`id`, `aluno_id`, `data_registro`, `aula_1`) VALUES
 
 
 -- --------------------------------------------------------
