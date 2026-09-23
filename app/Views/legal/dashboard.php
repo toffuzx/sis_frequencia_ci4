@@ -230,9 +230,9 @@
             text-decoration: underline;
         }
 
-        /* =====================================================
+        /* ====================================================
            P / F / J
-        ===================================================== */
+        ==================================================== */
         .status-badge {
             width: 70px;
             height: 30px;
@@ -775,7 +775,7 @@ function salvarStatusTemporario(alunoId, aulaNum, status) {
 document.addEventListener('DOMContentLoaded', function () {
     const perfilAtual = <?= json_encode($perfil) ?>;
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
-    if perfilAtual === professor{
+    if (perfilAtual === 'professor'){
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
@@ -790,14 +790,13 @@ document.addEventListener('DOMContentLoaded', function () {
          
             const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
             if (hiddenInput) hiddenInput.value = statusSalvo;
-        }
-    }
-        
+        }   
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
             salvarStatusTemporario(alunoId, aulaNum, novoStatus);
         });
     });
+    }
 });
 const selectFalta = document.getElementById('motivo');
 const blocoExtra = document.getElementById('atestado-campo');
@@ -860,8 +859,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </form>
     </div>
 </div>
-<!-- JAVASCRIPT-->
-<!-- JAVASCRIPT CORRIGIDO -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
