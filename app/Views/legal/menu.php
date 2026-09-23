@@ -127,7 +127,7 @@
 <div id="overlay-direito" class="overlay-menu" onclick="toggleMenuRight()"></div>
 
 <header class="topbar">
-    <a href="<?= base_url('login/logout') ?>" class="home-btn" title="Sair do sistema">
+    <a href="<?= base_url('login/logout') ?>" data-action="logout"class="home-btn" id="btn-logout" title="Sair do sistema">
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
 
@@ -153,6 +153,23 @@
 </div>
 
 <script>
+   document.getElementById('btn-logout').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    const urlLogout = this.href;
+    Swal.fire({
+        title: 'Deseja realmente sair?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sair',
+        cancelButtonColor: '#3b8540',
+        confirmButtonColor: '#d33',
+        }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = urlLogout;
+    }
+    });
+     });
+
     const urlAtual = window.location.pathname;
 if(urlAtual === '/dashboard'){
 document.querySelector('a[href*="dashboard"]').addEventListener('click', function(e) {

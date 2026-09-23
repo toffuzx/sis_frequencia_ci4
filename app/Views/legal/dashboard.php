@@ -766,8 +766,8 @@
                 
 <script>
 // Exemplo de salvamento ao alterar a aula/botão
-function salvarStatusTemporario(alunoId, aulaNum, status) {
-    const chave = `freq_${alunoId}_aula_${aulaNum}`;
+function salvarStatusTemporario(data, alunoId, aulaNum, status) {
+    const chave = `freq_${data}_${alunoId}_aula_${aulaNum}`;
     sessionStorage.setItem(chave, status);
 }
 
@@ -794,7 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }   
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
-            salvarStatusTemporario(alunoId, aulaNum, novoStatus);
+            salvarStatusTemporario(dataFiltro, alunoId, aulaNum, novoStatus);
         });
     });
     }
