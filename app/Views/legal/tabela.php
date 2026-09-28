@@ -105,22 +105,19 @@
 
         .aluno-nome-col { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
         .aluno-nome-col i { color: var(--primary-dark); background: #e8f0e9; padding: 6px; border-radius: 50%; font-size: 12px; margin-top: 2px; }
-        .nome-aluno-modal { font-size: 18px;}
-        .nome-aluno-modal { cursor: pointer; transition: 0.2s;}
-        .nome-aluno-modal:hover { color: var(--primary-green); text-decoration: underline; }
-
-
-        .campo-modal-justificativa { margin-bottom: 20px; }
-
-        .campo-modal-justificativa label.titulo-campo {
-            display: block;
-            color: var(--text-dark);
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
         
+        /* ESTILO LINK DO NOME DO ALUNO */
+        .nome-aluno-link { 
+            font-size: 14px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: var(--primary-green);
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .nome-aluno-link:hover { 
+            color: var(--primary-hover); 
+        }
 
         .badge-falta-tabela {
             background: #fce4e4; color: var(--error-red);
@@ -154,9 +151,7 @@
             .tables-grid { flex-direction: column; }
         }
 
-        /* Modal de justificativas */
-
-
+        /* ESTILOS DO MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -168,23 +163,76 @@
             justify-content: center;
         }
 
+        .modal-overlay.aberto {
+            display: flex !important;
+        }
+
         .modal-aluno {
             width: 100%;
-            max-width: 520px;
-            max-height: 90vh;
-            overflow-y: auto;
+            max-width: 580px;
+            max-height: 85vh;
             background: white;
-            border-radius: 18px;
+            border-radius: 16px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             animation: aparecerModal 0.2s ease;
-            
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fdfdfd;
+        }
+
+        .modal-header h3 { font-size: 16px; color: var(--primary-dark); }
+        .modal-header .close-btn {
+            font-size: 22px; cursor: pointer; color: #888; border: none; background: none; line-height: 1;
+        }
+        .modal-header .close-btn:hover { color: #000; }
+
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+        }
+
+        .item-falta-card {
+            background: #f9fbf9;
+            border: 1px solid #e3e8e3;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+        }
+
+        .item-falta-card:last-child { margin-bottom: 0; }
+
+        .item-falta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .falta-data {
+            font-weight: bold;
+            font-size: 13px;
+            color: var(--primary-dark);
+        }
+
+        .text-empty {
+            color: #999;
+            font-style: italic;
+            font-size: 12px;
         }
 
         @keyframes aparecerModal {
             from { opacity: 0; transform: translateY(15px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
     </style>
 </head>
 <body>
@@ -210,8 +258,8 @@
 
             <div class="filter-inputs-group">
                 <select id="select-mes" onchange="atualizarFiltros()">
-                    <?php foreach ($opcoes_meses as $valor_mes =>$texto_mes): ?>
-                        <option value="<?= $valor_mes ?>" <?= ($mes_selecionado ==$valor_mes) ? 'selected' : ''; ?>>
+                    <?php foreach ($opcoes_meses as $valor_mes => $texto_mes): ?>
+                        <option value="<?= $valor_mes ?>" <?= ($mes_selecionado == $valor_mes) ? 'selected' : ''; ?>>
                             <?= esc($texto_mes) ?>
                         </option>
                     <?php endforeach; ?>
@@ -219,9 +267,9 @@
 
                 <select id="select-turma" onchange="atualizarFiltros()">
                     <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>></option>
-                    <?php foreach ($lista_turmas_escola as$t): ?>
-                        <option value="<?= $t['id'] ?>" <?= ($turma_id ==$t['id']) ? 'selected' : ''; ?>>
-                            <?= esc($t['serie'] . ' ' .$t['nome']) ?>
+                    <?php foreach ($lista_turmas_escola as $t): ?>
+                        <option value="<?= $t['id'] ?>" <?= ($turma_id == $t['id']) ? 'selected' : ''; ?>>
+                            <?= esc($t['serie'] . ' ' . $t['nome']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -246,7 +294,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($ranking_turmas_faltas as $index =>$turma_item): ?>
+                        <?php foreach ($ranking_turmas_faltas as $index => $turma_item): ?>
                             <tr>
                                 <td style="font-weight: bold; width: 30px;"><?= $index + 1; ?>º</td>
                                 <td>
@@ -357,7 +405,7 @@
                             <tr>
                                 <th>Aluno / Motivo / Obs.</th>
                                 <th>Faltas</th>
-                                <th>Anexo</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -368,35 +416,20 @@
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php foreach ($tabela_alunos_justificados as $aluno): ?>
+                                <?php foreach ($tabela_alunos_justificados as$aluno): ?>
                                     <tr>
                                         <td>
                                             <div class="aluno-nome-col">
                                                 <i class="fa-solid fa-user"></i>
                                                 <div>
-
-                                                    <span class="nome-aluno-modal"
-                                                        data-nome="<?= esc($aluno['nome']); ?>"
-                                                        data-aluno="<?= esc($aluno['id']); ?>"
-                                                        data-justificativa="<?= esc($aluno['motivo']); ?>"
-                                                        data-observacoes="<?= esc($aluno['observacoes']); ?>"
-                                                        data-arquivo-nome="<?= esc($aluno['arquivo_nome']); ?>"
-                                                        >
-                                                      <?= esc($aluno['nome']); ?>
-                                                    </span>
-                                                    
-                                                    <?php if (!empty($aluno['motivo'])): ?>
-                                                        <div class="motivo-texto">
-                                                            <i class="" style="font-size: 10px; color: var(--primary-green); background: none; padding: 0;"></i>
-                                                            Motivo: <?= esc($aluno['motivo']); ?>
-                                                        </div>
-                                                    <?php endif; ?>
-
-                                                    <?php if (!empty($aluno['observacoes'])): ?>
-                                                        <div class="obs-texto">
-                                                            Obs: <?= esc($aluno['observacoes']); ?>
-                                                        </div>
-                                                    <?php endif; ?>
+                                                    <!-- BOTÃO COM APARÊNCIA DE LINK -->
+                                                    <a href="javascript:void(0)" 
+                                                       class="nome-aluno-link"
+                                                       data-nome="<?= esc($aluno['nome']); ?>"
+                                                       data-detalhes='<?= base64_encode(json_encode($aluno['detalhes_faltas'] ?? [])); ?>'>
+                                                        <?= esc($aluno['nome']); ?>
+                                                    </a>
+            
                                                 </div>
                                             </div>
                                         </td>
@@ -406,11 +439,8 @@
                                             </span>
                                         </td>
                                         <td>
-                            
                                             <?php if (!empty($aluno['arquivo_caminho']) || !empty($aluno['arquivo_nome'])): ?>
-                                                <a href="<?= base_url('arquivo/atestado/' . $aluno['justificativa_id']); ?>" target="_blank" class="btn-ver">
-                                                    <i class="fa-solid fa-eye"></i> Ver
-                                                </a>
+                                            
                                             <?php else: ?>
                                                 <span style="font-size: 11px; color: #999;">Sem anexo</span>
                                             <?php endif; ?>
@@ -436,25 +466,20 @@
 
     <?php include 'rodapelegal.php'; ?>
 
-       <!-- modal de ver justificativas -->
-
-                                            <div id="modal-aluno" class="modal-overlay">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <span id="cancelar-modal" class="close">&times;</span>
-                                                        <h3>Detalhes das Justificativas <span id="nome-aluno-modal"></span></h3>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p><strong>Motivo:</strong> <span id="modal-motivo"></span></p>
-                                                        <p><strong>Observações:</strong> <span id="modal-observacoes"></span></p>
-                                                        <p><strong>Anexo:</strong> <span id="modal-anexo"></span></p>
-                                                    </div>
-                                                </div>
-
-    
+    <!-- MODAL DE HISTÓRICO DE FALTAS -->
+    <div id="modal-aluno" class="modal-overlay">
+        <div class="modal-aluno">
+            <div class="modal-header">
+                <h3>Detalhes das Faltas - <span id="nome-aluno-modal"></span></h3>
+                <button type="button" id="cancelar-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-corpo-faltas">
+                <!-- Conteúdo dinâmico via JS -->
+            </div>
+        </div>
+    </div>
 
     <script>
-
         function atualizarFiltros() {
             const mes = document.getElementById('select-mes').value;
             const selectTurma = document.getElementById('select-turma');
@@ -467,8 +492,8 @@
             window.location.href = url;
         }
 
-        const dadosFaltasReais = <?= json_encode($valores_faltas); ?>;
-        const dadosJustificados = <?= json_encode($valores_justificadas); ?>;
+        const dadosFaltasReais = <?= json_encode($valores_faltas ?? []); ?>;
+        const dadosJustificados = <?= json_encode($valores_justificadas ?? []); ?>;
 
         const canvasGrafico = document.getElementById('graficoFaltas');
         if (canvasGrafico) {
@@ -476,10 +501,10 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: <?= json_encode($labels_dias); ?>,
+                    labels: <?= json_encode($labels_dias ?? []); ?>,
                     datasets: [{
                         label: 'Total de Ausentes',
-                        data: <?= json_encode($valores_totais); ?>,
+                        data: <?= json_encode($valores_totais ?? []); ?>,
                         backgroundColor: '#beddc2',    
                         maxBarThickness: 35,         
                     }]
@@ -510,41 +535,67 @@
                         }
                     },
                     scales: {
-                        x: {
-                            ticks: { maxRotation: 0, minRotation: 0 }
-                        },
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { stepSize: 1 } 
-                        }
+                        x: { ticks: { maxRotation: 0, minRotation: 0 } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
                     }
                 }
             });
         }
 
+        // LÓGICA ROBUSTA DO MODAL
         const modal = document.getElementById('modal-aluno');
-        const excluirModal = document.getElementById('excluir-modal');
         const cancelarModal = document.getElementById('cancelar-modal');
         const nomeModal = document.getElementById('nome-aluno-modal');
-        const nomeDisplay = document.getElementById('modal-nome-display');
-        const dataModal = document.getElementById('modal-data');
-        
+        const corpoModal = document.getElementById('modal-corpo-faltas');
 
-
-        document.querySelectorAll('.nome-aluno-modal').forEach(function (nome) {
-            nome.addEventListener('click', function (event) {
+        document.querySelectorAll('.nome-aluno-link').forEach(function (el) {
+            el.addEventListener('click', function (event) {
                 event.preventDefault();
-                event.stopPropagation();
 
-                const alunoId = this.getAttribute('data-aluno');
                 const nomeAluno = this.getAttribute('data-nome');
+                const rawDetalhesBase64 = this.getAttribute('data-detalhes');
+                let detalhes = [];
 
-                modal.setAttribute('data-aluno', alunoId);
+                try {
+                    // Decodifica a string em Base64 para evitar conflitos de aspas
+                    const jsonString = decodeURIComponent(escape(window.atob(rawDetalhesBase64)));
+                    detalhes = JSON.parse(jsonString);
+                } catch (e) {
+                    console.error("Erro ao ler JSON de detalhes:", e);
+                    detalhes = [];
+                }
+
                 nomeModal.textContent = nomeAluno;
-                nomeDisplay.textContent = nomeAluno;
+                corpoModal.innerHTML = '';
 
-                
-                observacoes.value = observacoesSalvas;
+                if (detalhes.length === 0) {
+                    corpoModal.innerHTML = '<p class="text-empty" style="text-align: center; padding: 20px;">Nenhum detalhe de falta encontrado para este aluno.</p>';
+                } else {
+                    detalhes.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'item-falta-card';
+
+                        const motivoHtml = item.motivo ? `<div><strong>Motivo:</strong> ${item.motivo}</div>` : '<div class="text-empty">Sem justificativa registrada</div>';
+                        const obsHtml = item.observacoes ? `<div style="font-size: 12px; margin-top: 4px;"><strong>Obs:</strong> ${item.observacoes}</div>` : '<div class="text-empty">Sem observações</div>';
+                        
+                        let anexoHtml = '<span class="text-empty">Sem atestado</span>';
+                        if (item.justificativa_id && (item.arquivo_nome || item.arquivo_caminho)) {
+                            anexoHtml = `<a href="<?= base_url('arquivo/atestado/'); ?>/${item.justificativa_id}" target="_blank" class="btn-ver"><i class="fa-solid fa-eye"></i> Ver atestado</a>`;
+                        }
+
+                        card.innerHTML = `
+                            <div class="item-falta-header">
+                                <span class="falta-data"><i class="fa-solid fa-calendar-day" style="margin-right: 5px;"></i> Dia ${item.data}</span>
+                                ${anexoHtml}
+                            </div>
+                            <div style="font-size: 13px; color: #333; margin-top: 6px;">
+                                ${motivoHtml}
+                                ${obsHtml}
+                            </div>
+                        `;
+                        corpoModal.appendChild(card);
+                    });
+                }
 
                 modal.classList.add('aberto');
                 document.body.style.overflow = 'hidden';
@@ -552,23 +603,19 @@
         });
 
         function fecharJanelaAluno() {
-        modal.classList.remove('aberto');
-        document.body.style.overflow = '';
-    }
+            modal.classList.remove('aberto');
+            document.body.style.overflow = '';
+        }
 
-    cancelarModal.addEventListener('click', fecharJanelaAluno);
+        cancelarModal.addEventListener('click', fecharJanelaAluno);
 
-    modal.addEventListener('click', function (event) {
-        if (event.target === modal) fecharJanelaAluno();
-    });
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal) fecharJanelaAluno();
+        });
 
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && modal.classList.contains('aberto')) fecharJanelaAluno();
-    });
-
-    
-
-        
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && modal.classList.contains('aberto')) fecharJanelaAluno();
+        });
     </script>
 </body>
 </html>
