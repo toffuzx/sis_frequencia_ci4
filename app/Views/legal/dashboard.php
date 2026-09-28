@@ -766,20 +766,21 @@
                 
 <script>
 // Exemplo de salvamento ao alterar a aula/botão
-function salvarStatusTemporario(alunoId, aulaNum, status) {
-    const chave = `freq_${alunoId}_aula_${aulaNum}`;
+function salvarStatusTemporario(alunoId, aulaNum, dataRegistro, status) {
+    const chave = `freq_${alunoId}_aula_${aulaNum}_data_${dataRegistro}`;
     sessionStorage.setItem(chave, status);
 }
 
 // Ao carregar a página, você recupera e aplica aos botões:
 document.addEventListener('DOMContentLoaded', function () {
+    const dataRegistro = <?= htmlspecialchars($data_filtro) ?>;
     const perfilAtual = <?= json_encode($perfil) ?>;
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
     if (perfilAtual === 'professor'){
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
-        const chave = `freq_${alunoId}_aula_${aulaNum}`;
+        const chave = `freq_${alunoId}_aula_${aulaNum}_data_${dataRegistro}`;
         const statusSalvo = sessionStorage.getItem(chave);
         
         if (statusSalvo) {
@@ -793,7 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }   
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
-            salvarStatusTemporario(alunoId, aulaNum, novoStatus);
+            salvarStatusTemporario(alunoId, aulaNum, dataRegistro, novoStatus);
         });
     });
     }
