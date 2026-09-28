@@ -230,9 +230,9 @@
             text-decoration: underline;
         }
 
-        /* =====================================================
+        /* ====================================================
            P / F / J
-        ===================================================== */
+        ==================================================== */
         .status-badge {
             width: 70px;
             height: 30px;
@@ -766,21 +766,21 @@
                 
 <script>
 // Exemplo de salvamento ao alterar a aula/botão
-function salvarStatusTemporario(alunoId, aulaNum, status) {
-    const chave = `freq_${alunoId}_aula_${aulaNum}`;
+function salvarStatusTemporario(alunoId, aulaNum, dataRegistro, status) {
+    const chave = `freq_${alunoId}_aula_${aulaNum}_data_${dataRegistro}`;
     sessionStorage.setItem(chave, status);
 }
 
 // Ao carregar a página, você recupera e aplica aos botões:
 document.addEventListener('DOMContentLoaded', function () {
+    const dataRegistro = <?= htmlspecialchars($data_filtro) ?>;
+    const perfilAtual = <?= json_encode($perfil) ?>;
     const botoesStatus = document.querySelectorAll('.aula-badge.is-interactive');
-
+    if (perfilAtual === 'professor'){
     botoesStatus.forEach(function (botao) {
         const alunoId = botao.dataset.aluno;
         const aulaNum = botao.dataset.aula;
-        const chave = `freq_${alunoId}_aula_${aulaNum}`;
-        
-
+        const chave = `freq_${alunoId}_aula_${aulaNum}_data_${dataRegistro}`;
         const statusSalvo = sessionStorage.getItem(chave);
         
         if (statusSalvo) {
@@ -791,14 +791,13 @@ document.addEventListener('DOMContentLoaded', function () {
          
             const hiddenInput = document.getElementById('hidden_' + alunoId + '_' + aulaNum);
             if (hiddenInput) hiddenInput.value = statusSalvo;
-        }
-
-        
+        }   
         botao.addEventListener('click', function () {
             const novoStatus = this.textContent.trim() === 'P' ? 'F' : 'P';
-            salvarStatusTemporario(alunoId, aulaNum, novoStatus);
+            salvarStatusTemporario(alunoId, aulaNum, dataRegistro, novoStatus);
         });
     });
+    }
 });
 const selectFalta = document.getElementById('motivo');
 const blocoExtra = document.getElementById('atestado-campo');
@@ -830,7 +829,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     alunos.forEach(function (alunoEl) {
         const idAluno = alunoEl.getAttribute('data-aluno');
-        const atrasado = alunoEl.getAttribute('d  ata-atrasado') === '1';
+        const atrasado = alunoEl.getAttribute('data-atrasado') === '1';
         const fardamento = alunoEl.getAttribute('data-fardamento') === '1';
         const observacoes = (alunoEl.getAttribute('data-observacoes') || '').trim();
 
@@ -861,8 +860,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </form>
     </div>
 </div>
-<!-- JAVASCRIPT-->
-<!-- JAVASCRIPT CORRIGIDO -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -931,6 +928,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault(); // Interrompe o envio para mostrar o Swal
 
                 Swal.fire({
+                    width: 350,
                     title: 'Atenção!',
                     text: 'Existem alunos com falta e marcação',
                     icon: 'warning',
@@ -975,6 +973,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (perfilAtual === 'professor' && possuiFalta) {
                 Swal.fire({
+                    width: 350,
                     icon: 'info',
                     title: 'Atenção',
                     text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
@@ -1063,6 +1062,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (resultado.sucesso) {
                     fecharJanelaAluno();
                     Swal.fire({
+                        width: 350,
                         icon: 'success',
                         title: 'Sucesso!',
                         text: resultado.mensagem || 'Justificativa adicionada com sucesso.',
@@ -1136,6 +1136,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalJustificativa() {
         fecharModalJustificativa(); 
         Swal.fire({
+            width: 350,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta justificativa?",
             icon: 'warning',
@@ -1158,6 +1159,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
+                            width: 350,
                             icon: 'success',
                             title: 'Excluído!',
                             text: resultado.mensagem || 'Justificativa removida com sucesso.',
@@ -1175,6 +1177,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalFrequencia() {
         fecharJanelaAluno();
         Swal.fire({
+            width: 350,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta marcação?",
             icon: 'warning',
@@ -1197,10 +1200,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
+                            width: 350,
+                             showCancelButton: false,
+                        showConfirmButton: false,
                             icon: 'success',
                             title: 'Excluído!',
-                            text: resultado.mensagem || 'Frequência removida com sucesso.',
-                            confirmButtonColor: '#3b8540'
+                             timer: 900,
+                             
                         }).then(() => window.location.reload());
                     } else {
                         Swal.fire('Erro', resultado.mensagem || 'Não foi possível excluir.', 'error');
@@ -1242,6 +1248,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 fecharModalJustificativa();
                 Swal.fire({
+                    width: 350,
                     icon: 'success',
                     title: 'Sucesso!',
                     text: resultado.mensagem || 'Justificativa salva com sucesso.',
