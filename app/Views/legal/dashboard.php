@@ -1065,8 +1065,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         width: 350,
                         icon: 'success',
                         title: 'Sucesso!',
-                        text: resultado.mensagem || 'Justificativa adicionada com sucesso.',
-                        confirmButtonColor: '#3b8540'
+                        text: resultado.mensagem || ' adicionada com sucesso.',
+                        confirmbuttom
                     }).then(() => window.location.reload());
                 } else {
                     alert(resultado.mensagem || 'Erro ao salvar justificativa.');
@@ -1163,7 +1163,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             icon: 'success',
                             title: 'Excluído!',
                             text: resultado.mensagem || 'Justificativa removida com sucesso.',
-                            confirmButtonColor: '#3b8540'
+                            showConfirmButton: false,
+                             timer: 900,
                         }).then(() => window.location.reload());
                     } else {
                         Swal.fire('Erro', resultado.mensagem || 'Não foi possível excluir.', 'error');
@@ -1252,7 +1253,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     icon: 'success',
                     title: 'Sucesso!',
                     text: resultado.mensagem || 'Justificativa salva com sucesso.',
-                    confirmButtonColor: '#3b8540'
+                     showConfirmButton: false,
+                     timer: 900,
                 }).then(() => window.location.reload());
             })
             .catch(err => {
