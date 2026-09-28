@@ -20,6 +20,7 @@ class Arquivo extends BaseController
 
         $caminhoCompleto = WRITEPATH . $caminhoRelativo;
 
+
         if (!file_exists($caminhoCompleto)) {
             return $this->response->setStatusCode(404)->setBody('Arquivo não encontrado.');
         }

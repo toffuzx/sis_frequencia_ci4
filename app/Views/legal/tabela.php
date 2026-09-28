@@ -266,7 +266,7 @@
                 </select>
 
                 <select id="select-turma" onchange="atualizarFiltros()">
-                    <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>></option>
+                    <option value="0" disabled hidden <?= empty($turma_id) ? 'selected' : '' ?>>Selecionar Turma</option>
                     <?php foreach ($lista_turmas_escola as $t): ?>
                         <option value="<?= $t['id'] ?>" <?= ($turma_id == $t['id']) ? 'selected' : ''; ?>>
                             <?= esc($t['serie'] . ' ' . $t['nome']) ?>
@@ -440,7 +440,7 @@
                                         </td>
                                         <td>
                                             <?php if (!empty($aluno['arquivo_caminho']) || !empty($aluno['arquivo_nome'])): ?>
-                                            
+                                                <span style="font-size: 11px; color: #999;">Com Anexo</span>
                                             <?php else: ?>
                                                 <span style="font-size: 11px; color: #999;">Sem anexo</span>
                                             <?php endif; ?>

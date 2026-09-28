@@ -199,6 +199,7 @@ class Tabela extends BaseController
                             }
                         }
                     }
+                    
                 }
 
                 if ($faltasSemJustificativas > 0) {
@@ -266,6 +267,32 @@ class Tabela extends BaseController
                     ];
                 }
             }
+// Ordena os alunos sem justificativa:
+// maior número de faltas primeiro.
+// Em caso de empate, ordena pelo nome.
+usort($tabelaAlunosSemJustificativa, function ($a, $b) {
+    $comparacao = $b['faltas_reais'] <=> $a['faltas_reais'];
+
+    if ($comparacao !== 0) {
+        return $comparacao;
+    }
+
+    return strcasecmp($a['nome'], $b['nome']);
+});
+
+// Ordena os alunos com faltas justificadas:
+// maior número de faltas primeiro.
+// Em caso de empate, ordena pelo nome.
+usort($tabelaAlunosJustificados, function ($a, $b) {
+    $comparacao = $b['faltas_reais'] <=> $a['faltas_reais'];
+
+    if ($comparacao !== 0) {
+        return $comparacao;
+    }
+
+    return strcasecmp($a['nome'], $b['nome']);
+});
+
         }
 
         $mesIndex = substr($mesSelecionado, 5, 2);

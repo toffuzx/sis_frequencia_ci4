@@ -127,7 +127,7 @@
 <div id="overlay-direito" class="overlay-menu" onclick="toggleMenuRight()"></div>
 
 <header class="topbar">
-    <a href="<?= base_url('login/logout') ?>" data-action="logout"class="home-btn" id="btn-logout" title="Sair do sistema">
+    <a href="<?= base_url('login/logout') ?>" class="home-btn" title="Sair do sistema">
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
 
@@ -153,6 +153,40 @@
 </div>
 
 <script>
+    const urlAtual = window.location.pathname;
+if(urlAtual === '/dashboard'){
+document.querySelector('a[href*="dashboard"]').addEventListener('click', function(e) {
+      Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1100
+    })
+      e.preventDefault();});
+}
+if(urlAtual === '/alterar_turma'){
+document.querySelector('a[href*="alterar_turma"]').addEventListener('click', function(e) {
+    Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1300
+    })
+    e.preventDefault();});
+    }
+if(urlAtual === '/tabela'){
+document.querySelector('a[href*="tabela"]').addEventListener('click', function(e) {
+    Swal.fire({
+                    title: 'Ops!',
+                    text: 'Você já se encontra nesta tela.',
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1300
+    })
+    e.preventDefault();});
+    }
     function toggleMenuRight() {
         const sidebar = document.getElementById("sidebar-direito");
         const overlay = document.getElementById("overlay-direito");
