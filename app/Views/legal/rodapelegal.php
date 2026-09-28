@@ -1,3 +1,6 @@
+<?php
+    $perfil = session()->get('perfil');
+?>
 <style>
     body {
         padding-bottom: 40px; 
@@ -74,8 +77,10 @@
 <footer class="footer-sistema">
     <span>&copy; <?php echo date('Y'); ?> EEEP Walter Ramos de Araújo.</span>
     
-    <a href="<?= base_url('creditos') ?> " target="_blank" class="footer-creditos-link" title="Desenvolvedores do Sistema">
-        <img src="<?= base_url('img/gato1.png') ?>" alt="Créditos" class="footer-img-dev normal">
-        <img src="<?= base_url('img/gato-pisca.png') ?>" alt="Créditos Piscando" class="footer-img-dev pisca">
-    </a>
+    <?php if ($perfil === 'gestão'): ?>
+        <a href="<?= base_url('creditos') ?> " target="_blank" class="footer-creditos-link" title="Desenvolvedores do Sistema">
+            <img src="<?= base_url('img/gato1.png') ?>" alt="Créditos" class="footer-img-dev normal">
+            <img src="<?= base_url('img/gato-pisca.png') ?>" alt="Créditos Piscando" class="footer-img-dev pisca">
+        </a>
+    <?php endif; ?>
 </footer>
