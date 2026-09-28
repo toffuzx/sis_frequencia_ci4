@@ -98,10 +98,24 @@
             margin-bottom: 0;
         }
 
+        
+
         .section-title { font-size: 16px; font-weight: bold; color: var(--primary-dark); margin-bottom: 15px; }
         .tabela-faltas { width: 100%; border-collapse: collapse; }
         .tabela-faltas th, .tabela-faltas td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         .tabela-faltas th { color: #777; font-size: 13px; }
+
+        .tabela-coisas { width: 100%; border-collapse: collapse; }
+        .tabela-coisas th, .tabela-coisas td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .tabela-coisas th { color: #777; font-size: 13px; }
+
+
+
+        .tabela-faltas th:first-child, .tabela-faltas td:first-child {
+            text-align: left;
+            padding-left: 20px;
+            
+        }
 
         .aluno-nome-col { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
         .aluno-nome-col i { color: var(--primary-dark); background: #e8f0e9; padding: 6px; border-radius: 50%; font-size: 12px; margin-top: 2px; }
@@ -144,11 +158,14 @@
         .obs-texto { font-size: 11px; color: var(--text-gray); margin-top: 2px; font-style: italic; }
 
         @media (max-width: 900px) {
+            .tabela-coisas th, .tabela-coisas td, .tabela-faltas th, .tabela-faltas td { font-size: 12px; padding: 10px; }
+            .table-box { flex-direction: column; align-items: stretch; gap: 15px; }
             .dashboard-filter-card { flex-direction: column; align-items: stretch; gap: 15px; }
             .filter-inputs-group { flex-direction: column; width: 100%; gap: 10px; }
             .filter-inputs-group select { width: 100%; min-width: 0; }
             .cards-grid { flex-direction: column; }
             .tables-grid { flex-direction: column; }
+            .tables-grid th, .tables-grid td { font-size: 13px; padding: 14px; }
         }
 
         /* ESTILOS DO MODAL */
@@ -266,7 +283,7 @@
                 </select>
 
                 <select id="select-turma" onchange="atualizarFiltros()">
-                    <option value="0" disabled hidden <?= empty($turma_id) ? 'selected' : '' ?>>Selecionar Turma</option>
+                    <option value="0" <?= empty($turma_id) ? 'selected' : '' ?>></option>
                     <?php foreach ($lista_turmas_escola as $t): ?>
                         <option value="<?= $t['id'] ?>" <?= ($turma_id == $t['id']) ? 'selected' : ''; ?>>
                             <?= esc($t['serie'] . ' ' . $t['nome']) ?>
@@ -283,7 +300,7 @@
                     <i class="fa-solid fa-ranking-star" style="margin-right: 8px;"></i>
                     Ranking de Turmas Mais Faltosas (<?= esc($nome_mes_exibicao); ?>)
                 </div>
-                <table class="tabela-faltas">
+                <table class="tabela-coisas" >
                     <thead>
                         <tr>
                             <th></th>
@@ -403,9 +420,8 @@
                     <table class="tabela-faltas">
                         <thead>
                             <tr>
-                                <th>Aluno / Motivo / Obs.</th>
-                                <th>Faltas</th>
-                                
+                                <th>Aluno</th>
+                                <th>Faltas</th>  
                             </tr>
                         </thead>
                         <tbody>
@@ -438,13 +454,7 @@
                                                 <?= str_pad($aluno['faltas_reais'], 2, "0", STR_PAD_LEFT); ?>
                                             </span>
                                         </td>
-                                        <td>
-                                            <?php if (!empty($aluno['arquivo_caminho']) || !empty($aluno['arquivo_nome'])): ?>
-                                                <span style="font-size: 11px; color: #999;">Com Anexo</span>
-                                            <?php else: ?>
-                                                <span style="font-size: 11px; color: #999;">Sem anexo</span>
-                                            <?php endif; ?>
-                                        </td>
+                                        
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
