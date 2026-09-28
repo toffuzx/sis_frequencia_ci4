@@ -74,13 +74,13 @@
 <body>
 
     <div class="creditos-card">
-        <img src="img/auraj.png" alt="gato aura" class="gato-aura">
+        <img src="" alt="insert image here" class="gato-aura">
         
         <p class="texto-creditos">
-            eu mudei o texto
+           Insert creators here
         </p>
         
-        <p class="ug"><strong>........................................................................................................................................................................................................................................................................................................................................</strong></p>
+        <p class="ug"><strong></strong></p>
     </div>
 
 </body>
