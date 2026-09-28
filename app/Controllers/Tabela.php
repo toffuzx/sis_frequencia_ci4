@@ -14,7 +14,6 @@ class Tabela extends BaseController
         $session = session();
         $perfil = $session->get('perfil');
 
-        // Apenas Gestão tem permissão de acesso
         if ($perfil !== 'gestão' && $perfil !== 'gestao') {
             return view('errors/html/acesso_restrito');
         }
@@ -22,7 +21,6 @@ class Tabela extends BaseController
         $db = \Config\Database::connect();
         $turmaModel = new TurmaModel();
 
-        // --- FILTROS DE MÊS E TURMA ---
         $mesSelecionado = $this->request->getGet('mes') ?? date('Y-m');
         $turmaId = (int) ($this->request->getGet('turma_id') ?? $this->request->getGet('selecionar_turma_id') ?? 0);
 
@@ -32,7 +30,6 @@ class Tabela extends BaseController
             $turmaId = (int) $session->get('ultima_turma_gestao');
         }
 
-        // --- GERAÇÃO AUTOMÁTICA DE OPÇÕES DE MESES ---
         $mesesNomes = [
             '01' => 'Janeiro',   '02' => 'Fevereiro', '03' => 'Março',    '04' => 'Abril', 
             '05' => 'Maio',      '06' => 'Junho',     '07' => 'Julho',    '08' => 'Agosto', 
@@ -49,13 +46,11 @@ class Tabela extends BaseController
             $opcoesMeses[$chaveMes] = $mesesNomes[$mesZero] . ' de ' . $anoAtual;
         }
 
-        // Lista de turmas para o dropdown
         $listaTurmasEscola = $turmaModel->where('serie !=', 'ADMINISTRADOR')
                                          ->orderBy('serie', 'ASC')
                                          ->orderBy('nome', 'ASC')
                                          ->findAll();
 
-        // --- DEFINIÇÃO DA TURMA ---
         $mostrarConteudo = false;
         $nomeTurma = 'Todas as Turmas';
 
@@ -67,7 +62,6 @@ class Tabela extends BaseController
             }
         }
 
-        // --- RANKING DE TURMAS MAIS FALTOSAS ---
         $rankingTurmasFaltas = [];
         $builderRanking = $db->table('frequencias f')
             ->select('t.id AS turma_id, t.serie, t.nome AS nome_turma, f.aula_1')
@@ -114,7 +108,6 @@ class Tabela extends BaseController
             return $b['faltas_reais'] <=> $a['faltas_reais'];
         });
 
-        // --- DASHBOARD E MÉTRICAS DA TURMA SELECIONADA ---
         $totalFaltasTurma = 0;
         $percentualFaltasTurma = 0;
         $labelsDias = [];
@@ -148,7 +141,6 @@ class Tabela extends BaseController
                 ? round(($totalFaltasTurma / $totalOportunidadesAulas) * 100, 0) 
                 : 0;
 
-            // Dados do Gráfico por Dia
             $anoPart = (int) substr($mesSelecionado, 0, 4);
             $mesPart = (int) substr($mesSelecionado, 5, 2);
             $qtdDiasMes = cal_days_in_month(CAL_GREGORIAN, $mesPart, $anoPart);
@@ -184,12 +176,10 @@ class Tabela extends BaseController
             $valoresFaltas = array_values($mapeamentoFaltas);
             $valoresJustificadas = array_values($mapeamentoJustificadas);
 
-            // Lista de Alunos
             $builderAlunos = $db->table('alunos a')
                 ->select('a.id, a.nome')
                 ->where('a.turma_id', $turmaId)
                 ->orderBy('a.nome', 'ASC');
-
 
             $listaAlunos = $builderAlunos->get()->getResultArray();
 
@@ -197,7 +187,6 @@ class Tabela extends BaseController
                 $faltasSemJustificativas = 0;
                 $faltasJustificadas = 0;
                 $totalAulasAluno = 0;
-                
 
                 foreach ($frequenciasMes as $f) {
                     if ($f['aluno_id'] == $aluno['id']) {
@@ -210,6 +199,7 @@ class Tabela extends BaseController
                             }
                         }
                     }
+                    
                 }
 
                 if ($faltasSemJustificativas > 0) {
@@ -220,33 +210,89 @@ class Tabela extends BaseController
                         'faltas_reais'     => $faltasSemJustificativas,
                         'percentual'       => $percA,
                     ];
-
                 }
 
                 if ($faltasJustificadas > 0) {
-                $percA = $totalAulasAluno > 0 ? round(($faltasJustificadas / $totalAulasAluno) * 100, 0) : 0;
+                    $percA = $totalAulasAluno > 0 ? round(($faltasJustificadas / $totalAulasAluno) * 100, 0) : 0;
 
-                $justificativa = $db->table('justificativas_faltas')
-                    ->where('aluno_id', $aluno['id'])
-                    ->orderBy('id', 'DESC')
-                    ->get()
-                    ->getRowArray();
+                    // Busca os registros das faltas justificadas com datas
+                    $freqsJustificadasAluno = array_filter($frequenciasMes, function($fm) use ($aluno) {
+                        return $fm['aluno_id'] == $aluno['id'] && ($fm['aula_1'] ?? '') === 'J';
+                    });
 
-                $tabelaAlunosJustificados[] = [
+                                    $detalhesFaltas = [];
+                    foreach ($freqsJustificadasAluno as $fJA) {
+                        $dataFormatted = date('d/m/Y', strtotime($fJA['data_registro']));
+
+                        // BUSCA A JUSTIFICATIVA DA DATA EXATA DA FALTA DO ALUNO
+                        $justificativa = $db->table('justificativas_faltas')
+                            ->where('aluno_id', $aluno['id'])
+                            ->where('data_registro', $fJA['data_registro']) // <- FILTRO PELA DATA DA FALTA
+                            ->orderBy('id', 'DESC')
+                            ->get()
+                            ->getRowArray();
+
+                        // Se não encontrar pela data exata, tenta buscar a última justificativa geral como fallback
+                        if (!$justificativa) {
+                            $justificativa = $db->table('justificativas_faltas')
+                                ->where('aluno_id', $aluno['id'])
+                                ->orderBy('id', 'DESC')
+                                ->get()
+                                ->getRowArray();
+                        }
+
+                        $detalhesFaltas[] = [
+                            'data'             => $dataFormatted,
+                            'justificativa_id' => $justificativa['id'] ?? null,
+                            'motivo'           => !empty($justificativa['motivo']) ? $justificativa['motivo'] : 'Não informado',
+                            'observacoes'      => $justificativa['observacoes'] ?? '', // Garante o envio do campo observacoes
+                            'arquivo_nome'     => $justificativa['arquivo_nome'] ?? '',
+                            'arquivo_caminho'  => $justificativa['arquivo_caminho'] ?? ''
+                        ];
+                    }
+
+                    $ultimaJust = $detalhesFaltas[0] ?? [];
+
+                    $tabelaAlunosJustificados[] = [
                         'id'               => $aluno['id'],
                         'nome'             => $aluno['nome'],
                         'faltas_reais'     => $faltasJustificadas,
                         'percentual'       => $percA,
-                        'justificativa_id' => $justificativa['id'] ?? null,
-                        'motivo'           => $justificativa['motivo'] ?? '',
-                        'observacoes'      => $justificativa['observacoes'] ?? '',
-                        'arquivo_nome'     => $justificativa['arquivo_nome'] ?? '',
-                        'arquivo_caminho'  => $justificativa['arquivo_caminho'] ?? ''
-                ];
-
-                 
+                        'justificativa_id' => $ultimaJust['justificativa_id'] ?? null,
+                        'motivo'           => $ultimaJust['motivo'] ?? '',
+                        'observacoes'      => $ultimaJust['observacoes'] ?? '',
+                        'arquivo_nome'     => $ultimaJust['arquivo_nome'] ?? '',
+                        'arquivo_caminho'  => $ultimaJust['arquivo_caminho'] ?? '',
+                        'detalhes_faltas'  => $detalhesFaltas
+                    ];
                 }
             }
+// Ordena os alunos sem justificativa:
+// maior número de faltas primeiro.
+// Em caso de empate, ordena pelo nome.
+usort($tabelaAlunosSemJustificativa, function ($a, $b) {
+    $comparacao = $b['faltas_reais'] <=> $a['faltas_reais'];
+
+    if ($comparacao !== 0) {
+        return $comparacao;
+    }
+
+    return strcasecmp($a['nome'], $b['nome']);
+});
+
+// Ordena os alunos com faltas justificadas:
+// maior número de faltas primeiro.
+// Em caso de empate, ordena pelo nome.
+usort($tabelaAlunosJustificados, function ($a, $b) {
+    $comparacao = $b['faltas_reais'] <=> $a['faltas_reais'];
+
+    if ($comparacao !== 0) {
+        return $comparacao;
+    }
+
+    return strcasecmp($a['nome'], $b['nome']);
+});
+
         }
 
         $mesIndex = substr($mesSelecionado, 5, 2);
@@ -254,29 +300,26 @@ class Tabela extends BaseController
         $anoExibicao = substr($mesSelecionado, 0, 4);
 
         $data = [
-           
-            'mes_selecionado'               => $mesSelecionado,
-            'opcoes_meses'                  => $opcoesMeses,
-            'lista_turmas_escola'           => $listaTurmasEscola,
-            'turma_id'                      => $turmaId,
-            'nome_turma'                    => $nomeTurma,
-            'perfil_usuario'                => $perfil,
-            'mostrar_conteudo'              => $mostrarConteudo,
-            'ranking_turmas_faltas'         => $rankingTurmasFaltas,
-            'total_faltas_turma'            => $totalFaltasTurma,
-            'percentual_faltas_turma'       => $percentualFaltasTurma,
-            'labels_dias'                   => $labelsDias,
-            'valores_totais'                => $valoresTotais,
-            'valores_faltas'                => $valoresFaltas,
-            'valores_justificadas'          => $valoresJustificadas,
+            'mes_selecionado'                 => $mesSelecionado,
+            'opcoes_meses'                    => $opcoesMeses,
+            'lista_turmas_escola'             => $listaTurmasEscola,
+            'turma_id'                        => $turmaId,
+            'nome_turma'                      => $nomeTurma,
+            'perfil_usuario'                  => $perfil,
+            'mostrar_conteudo'                => $mostrarConteudo,
+            'ranking_turmas_faltas'           => $rankingTurmasFaltas,
+            'total_faltas_turma'              => $totalFaltasTurma,
+            'percentual_faltas_turma'         => $percentualFaltasTurma,
+            'labels_dias'                     => $labelsDias,
+            'valores_totais'                  => $valoresTotais,
+            'valores_faltas'                  => $valoresFaltas,
+            'valores_justificadas'            => $valoresJustificadas,
             'tabela_alunos_sem_justificativa' => $tabelaAlunosSemJustificativa,
-            'tabela_alunos_justificados'    => $tabelaAlunosJustificados,
-            'nome_mes_exibicao'             => $nomeMesExibicao,
-            'ano_exibicao'                  => $anoExibicao,
+            'tabela_alunos_justificados'      => $tabelaAlunosJustificados,
+            'nome_mes_exibicao'               => $nomeMesExibicao,
+            'ano_exibicao'                    => $anoExibicao,
         ];
 
         return view('legal/tabela', $data);
     }
-
-
 }
