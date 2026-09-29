@@ -1066,7 +1066,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon: 'success',
                         title: 'Sucesso!',
                         text: resultado.mensagem || ' adicionada com sucesso.',
-                        confirmbuttom
+                        showConfirmButton: false,
+                        timer: 900,
                     }).then(() => window.location.reload());
                 } else {
                     alert(resultado.mensagem || 'Erro ao salvar justificativa.');
