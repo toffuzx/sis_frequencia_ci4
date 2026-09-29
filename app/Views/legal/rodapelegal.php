@@ -68,7 +68,7 @@
         opacity: 0;
     }
 
-    /* 3. Mostra a imagem piscando */
+    /* 3. Mostra a imagem piscan do */
     .footer-creditos-link:hover .footer-img-dev.pisca {
         opacity: 1;
     }
