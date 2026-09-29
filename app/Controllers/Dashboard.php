@@ -180,14 +180,26 @@ class Dashboard extends BaseController
     $json = $this->request->getJSON(true);
     $alunoId = $json['aluno_id'] ?? null;
     $dataRegistro = $json['data_registro'] ?? null;
+    
+    $valida = $db->table('justificativas_alunos')
+            ->where('aluno_id', $alunoId)
+            ->where('data_registro', $dataRegistro)
+            ->get()->getRow();
+            
+    if(!isset($valida)){
+        return $this->response->setJSON([
+            'sucesso' => false,
+            'mensagem' => 'Não existe justificativa a ser excluída.'
+        ]);
+    }
 
     if (!$alunoId || !$dataRegistro) {
         return $this->response->setJSON([
             'sucesso' => false, 
             'mensagem' => 'Erro ao excluir.'
-        ]);
-    }
-
+            ]);
+            }
+            
     try {
         $db->table('justificativas_alunos')
            ->where('aluno_id', $alunoId)

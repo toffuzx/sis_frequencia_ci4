@@ -1147,6 +1147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             confirmButtonText: 'Sim, excluir!',
             cancelButtonText: 'Cancelar'
         }).then(function(result) {
+            console.log(result);
             if (result.isConfirmed) {
                 const alunoId = document.getElementById('justificativa-aluno-id').value;
                 const dataRegistro = "<?= htmlspecialchars($data_filtro) ?>";
@@ -1159,6 +1160,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(resultado => {
                     if (resultado.sucesso) {
+                        console.log(resultado);
                         Swal.fire({
                             width: 350,
                             icon: 'success',
@@ -1196,20 +1198,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 fetch('<?= site_url("excluir_frequencia") ?>', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                    body: JSON.stringify({ aluno_id: alunoId, data_registro: dataRegistro })
+                    body: JSON.stringify({ aluno_id: alunoId, data_registro: dataRegistro }),
                 })
-                .then(response => response.json())
-                .then(resultado => {
+                .then(response => response.json()).then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
                             width: 350,
-                             showCancelButton: false,
-                        showConfirmButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
                             icon: 'success',
-                            title: 'Excluído!',
-                             timer: 900,
-                             
-                        }).then(() => window.location.reload());
+                            title: resultado.mensagem,
+                            timer: 900,
+                        })
+                        .then(() => window.location.reload());
                     } else {
                         Swal.fire('Erro', resultado.mensagem || 'Não foi possível excluir.', 'error');
                     }
