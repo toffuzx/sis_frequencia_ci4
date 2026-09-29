@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09-Set-2026 às 18:36
+-- Tempo de geração: 29/09/2026 às 15:04
 -- Versão do servidor: 10.4.32-MariaDB
--- versão do PHP: 8.2.12
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `alunos`
+-- Estrutura para tabela `alunos`
 --
 
 CREATE TABLE `alunos` (
@@ -34,7 +34,7 @@ CREATE TABLE `alunos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `alunos`
+-- Despejando dados para a tabela `alunos`
 --
 
 INSERT INTO `alunos` (`id`, `nome`, `turma_id`) VALUES
@@ -128,91 +128,6 @@ INSERT INTO `alunos` (`id`, `nome`, `turma_id`) VALUES
 (91, 'SOPHIA ASSIS DE PAULA PESSOA', 2),
 (92, 'SOPHIA DE ANDRADE MENEZES', 2),
 (93, 'YASMIM HELLEN DA SILVA CARNEIRO', 2),
-(94, 'ADRIEL DO NASCIMENTO AGUIAR', 12),
-(95, 'ALBERTO OLIVEIRA LIMA DE CARVALHO', 12),
-(96, 'ANA CIBELLY MARTINS MOREIRA', 12),
-(97, 'ANA VITÓRIA SALES FERREIRA', 12),
-(98, 'BÁRBARA DE SOUZA ARRUDA', 12),
-(99, 'BARBARA KELLY FREITAS MARTINS', 12),
-(100, 'DANY CAVALCANTE DOS SANTOS', 12),
-(101, 'CAUÃ VITOR DE OLIVEIRA PEREIRA', 12),
-(102, 'CLEANDERSON CARDOSO DOS SANTOS', 12),
-(103, 'DANTE MORAIS RODRIGUES', 12),
-(104, 'EMANUEL LERYON PESSOA JUVENCIO', 12),
-(105, 'EVELYN DE CASTRO MARTINS', 12),
-(106, 'EVELYN DE LIMA SILVA', 12),
-(107, 'GIZELLY ALEXANDRE SILVA', 12),
-(108, 'JEFFERSON MARQUES ALVES', 12),
-(109, 'JOANNA DELIDE URSULINO DA SILVA FEITOSA', 12),
-(110, 'JOAO FELIPE SILVA SANTOS', 12),
-(111, 'JOAO MARCUS SAMPAIO MATOS', 12),
-(112, 'JOÃO PEDRO SANTOS GENUINO BORGES', 12),
-(113, 'JOSE CAIRO CAVALCANTE DA SILVA', 12),
-(114, 'KAUA SILVA DE CASTRO', 12),
-(115, 'KHALIL OLIVEIRA LIMA', 12),
-(116, 'LIVIA RAABE MIGUEL PEREIRA', 12),
-(117, 'LUCIMARA DA SILVA OLIVEIRA', 12),
-(118, 'MARCOS RYAN SANTOS SARAIVA', 12),
-(119, 'MARIA ALICE GOMES QUEIROZ', 12),
-(120, 'MARIA CLARA BRAGA SOUSA', 12),
-(121, 'MARJORYE VITORIA OLIVEIRA BEZERRA', 12),
-(122, 'MIGUEL SIMOES OLIVEIRA', 12),
-(123, 'NOE KAYO ARAUJO TEIXEIRA', 12),
-(124, 'PAULO ERIC MARTINS JUVENCIO', 12),
-(125, 'PIETRO DE ALMEIDA PARAISO', 12),
-(126, 'PEDRO HENRIQUE BARBOSA OLIVEIRA', 12),
-(127, 'RAFAELLY DA SILVA BATISTA', 12),
-(128, 'RAQUEL BATISTA PALMA LIMA', 12),
-(129, 'RUAN ARAUJO HERCULANO', 12),
-(130, 'SAMUEL MOURA GALUCHO', 12),
-(131, 'SOPHIA MENDES CAVALCANTE', 12),
-(132, 'THIAGO SOUZA MATOS RODRIGUES', 12),
-(133, 'VICTOR SILVA DE CASTRO', 12),
-(134, 'VICTOR EMANUEL LIMA FERNANDES', 12),
-(135, 'YAN SILVA DE CASTRO', 12),
-(137, 'ALEFE RYAN PAULINO MARTINS', 11),
-(138, 'ALESSANDRA DOS SANTOS SOUSA', 11),
-(139, 'ANNA EVELLYN LIMA JUVENCIO', 11),
-(140, 'ANNY VITORIA ATALIBA MORAIS HERCULANO', 11),
-(141, 'BEATRIZ NOGUEIRA SILVA', 11),
-(142, 'CAIO ANDRADE BERNARDO', 11),
-(143, 'CARLOS DANIEL DA SILVA GOMES', 11),
-(144, 'CARLOS EDUARDO ALVES MARQUES', 11),
-(145, 'CARLOS GABRIEL FERREIRA MENESES', 11),
-(146, 'GABRIEL VICTOR MESQUITA DE ASSIS', 11),
-(147, 'GABRIELLY VICTÓRA MESQUITA DE ASSIS', 11),
-(148, 'GERALDO ANTONIO DE SOUSA NETO', 11),
-(149, 'GERLESSON RIAN SALES TAMBORIL', 11),
-(150, 'GIANNA TAFNES MOREIRA SIMPLICIO', 11),
-(151, 'ISABELLY MOURA DE ABREU', 11),
-(152, 'JOÃO BENÍCIO CORREIA SOARES', 11),
-(153, 'JOAO HENRIQUE SAMPAIO TRAGINO', 11),
-(154, 'JOAO LUANDERSON FERREIRA SOUSA', 11),
-(155, 'JOSIELLY ALMEIDA DA SILVA', 11),
-(156, 'JULIA STEFANE CASTRO DO NASCIMENTO', 11),
-(157, 'KARLA MARIANA NUNES DE ABREU', 11),
-(158, 'KRISNAC HENRIQUE MONTEIRO GABRIEL', 11),
-(159, 'LARA KAREN CORREIA DA ROCHA', 11),
-(160, 'LILYAMARA NUNES ALMEIDA', 11),
-(161, 'LUARA LAYLA OLIVEIRA MARQUES', 11),
-(162, 'LUÍS GUSTAVO BARBOSA AMARAL', 11),
-(163, 'LUÍS GUSTAVO FERREIRA DA SILVA', 11),
-(164, 'MARCOS PAULO SANTOS RODRIGUES', 11),
-(165, 'MARCOS RANIERI CRUZ DE OLIVEIRA', 11),
-(166, 'MARIA ARIANE DE SOUSA SILVA', 11),
-(167, 'MARIA CIBELE DA COSTA NOGUEIRA', 11),
-(168, 'MARIA CLARA BARROSO MAGALHAES', 11),
-(169, 'MARIA CLARA HOLANDA DA SILVA', 11),
-(170, 'MARIA CRISTIELE DA SILVA SOARES', 11),
-(171, 'MARIA LARYSSA DE SOUZA BARBOSA', 11),
-(172, 'MARIA VITORIA LOPES ALMEIDA', 11),
-(173, 'NICOLE BARROS JERONIMO', 11),
-(174, 'PRISCILA KAREN FORTE ESTEVAO', 11),
-(175, 'RALEY SOUSA HONORATO', 11),
-(176, 'RENNAN RIBEIRO DE MORAIS', 11),
-(177, 'RICK ANDERSON RAMOS DA SILVA', 11),
-(178, 'TICIANE SILVA DE SALES', 11),
-(179, 'YURI RAYLANDER TOME FARIAS', 11),
 (180, 'ANA CECILIA MORAIS FERREIRA', 3),
 (181, 'ANA CLARA CARNEIRO SILVA', 3),
 (182, 'ANA CLARA OLIVEIRA MOURA', 3),
@@ -490,7 +405,6 @@ INSERT INTO `alunos` (`id`, `nome`, `turma_id`) VALUES
 (454, 'ANA LUISE FERNANDES TEIXEIRA', 9),
 (455, 'ANDRESSA WEYLLA MORAIS ALVES', 9),
 (456, 'ANGELICA HONORIO DE OLIVEIRA', 9),
-(457, 'ANTONIO HUMBERTO GONCALVES UCHOA', 9),
 (458, 'DOUGLAS GONCALVES MATOS', 9),
 (459, 'EMILLY DE SENA OLIVEIRA', 9),
 (460, 'FRANCISCA LETICIA VIANA DA SILVA', 9),
@@ -571,12 +485,99 @@ INSERT INTO `alunos` (`id`, `nome`, `turma_id`) VALUES
 (535, 'VICTOR LENNYZIO MOREIRA LIMA', 10),
 (536, 'VITOR MANOEL DA SILVA CORREIA', 10),
 (537, 'YASMIN BEZERRA ANDRADE', 10),
-(538, 'YASMIN VITORIA MARTINS DE MOURA', 10);
+(538, 'YASMIN VITORIA MARTINS DE MOURA', 10),
+(631, 'ANTONIO HUMBERTO GONCALVES UCHOA', 9),
+(674, 'ADRIEL DO NASCIMENTO AGUIAR', 12),
+(675, 'ALBERTO OLIVEIRA LIMA DE CARVALHO', 12),
+(676, 'ANA CIBELLY MARTINS MOREIRA', 12),
+(677, 'ANA VITÓRIA SALES FERREIRA', 12),
+(678, 'BÁRBARA DE SOUZA ARRUDA', 12),
+(679, 'BARBARA KELLY FREITAS MARTINS', 12),
+(680, 'DANY CAVALCANTE DOS SANTOS (DANY)', 12),
+(681, 'CAUÃ VITOR DE OLIVEIRA PEREIRA', 12),
+(682, 'CLEANDERSON CARDOSO DOS SANTOS', 12),
+(683, 'DANTE MORAIS RODRIGUES', 12),
+(684, 'EMANUEL LERYON PESSOA JUVENCIO', 12),
+(685, 'EVELYN DE CASTRO MARTINS', 12),
+(686, 'EVELYN DE LIMA SILVA', 12),
+(687, 'GIZELLY ALEXANDRE SILVA', 12),
+(688, 'JEFFERSON MARQUES ALVES', 12),
+(689, 'JOANNA DELIDE URSULINO DA SILVA FEITOSA', 12),
+(690, 'JOAO FELIPE SILVA SANTOS', 12),
+(691, 'JOAO MARCUS SAMPAIO MATOS', 12),
+(693, 'JOÃO PEDRO SANTOS GENUINO BORGES', 12),
+(694, 'JOSE CAIRO CAVALCANTE DA SILVA', 12),
+(695, 'KAUA SILVA DE CASTRO', 12),
+(696, 'KHALIL OLIVEIRA LIMA', 12),
+(697, 'LIVIA RAABE MIGUEL PEREIRA', 12),
+(698, 'LUCIMARA DA SILVA OLIVEIRA', 12),
+(700, 'MARCOS RYAN SANTOS SARAIVA', 12),
+(701, 'MARIA ALICE GOMES QUEIROZ', 12),
+(702, 'MARIA CLARA BRAGA SOUSA', 12),
+(703, 'MARJORYE VITORIA OLIVEIRA BEZERRA', 12),
+(704, 'MIGUEL SIMOES OLIVEIRA', 12),
+(705, 'NOE KAYO ARAUJO TEIXEIRA', 12),
+(706, 'PAULO ERIC MARTINS JUVENCIO', 12),
+(707, 'PIETRO DE ALMEIDA PARAISO', 12),
+(708, 'PEDRO HENRIQUE BARBOSA OLIVEIRA', 12),
+(709, 'RAFAELLY DA SILVA BATISTA', 12),
+(710, 'RAQUEL BATISTA PALMA LIMA', 12),
+(712, 'RUAN ARAUJO HERCULANO', 12),
+(713, 'SAMUEL MOURA GALUCHO', 12),
+(714, 'SOPHIA MENDES CAVALCANTE', 12),
+(715, 'THIAGO SOUZA MATOS RODRIGUES', 12),
+(716, 'VICTOR SILVA DE CASTRO', 12),
+(717, 'VICTOR EMANUEL LIMA FERNANDES', 12),
+(718, 'YAN SILVA DE CASTRO', 12),
+(719, 'ALEFE RYAN PAULINO MARTINS', 11),
+(720, 'ALESSANDRA DOS SANTOS SOUSA', 11),
+(721, 'ANNA EVELLYN LIMA JUVENCIO', 11),
+(722, 'ANNY VITORIA ATALIBA MORAIS HERCULANO', 11),
+(723, 'BEATRIZ NOGUEIRA SILVA', 11),
+(724, 'CAIO ANDRADE BERNARDO', 11),
+(725, 'CARLOS DANIEL DA SILVA GOMES', 11),
+(726, 'CARLOS EDUARDO ALVES MARQUES', 11),
+(727, 'CARLOS GABRIEL FERREIRA MENESES', 11),
+(728, 'GABRIEL VICTOR MESQUITA DE ASSIS', 11),
+(729, 'GABRIELLY VICTÓRA MESQUITA DE ASSIS', 11),
+(730, 'GERALDO ANTONIO DE SOUSA NETO', 11),
+(731, 'GERLESSON RIAN SALES TAMBORIL', 11),
+(732, 'GIANNA TAFNES MOREIRA SIMPLICIO', 11),
+(733, 'ISABELLY MOURA DE ABREU', 11),
+(734, 'JOÃO BENÍCIO CORREIA SOARES', 11),
+(735, 'JOAO HENRIQUE SAMPAIO TRAGINO', 11),
+(736, 'JOAO LUANDERSON FERREIRA SOUSA', 11),
+(737, 'JOSÉ WESLEY OLIVEIRA SILVA', 11),
+(738, 'JOSIELLY ALMEIDA DA SILVA', 11),
+(739, 'JULIA STEFANE CASTRO DO NASCIMENTO', 11),
+(740, 'KARLA MARIANA NUNES DE ABREU', 11),
+(741, 'KRISNAC HENRIQUE MONTEIRO GABRIEL', 11),
+(742, 'LARA KAREN CORREIA DA ROCHA', 11),
+(743, 'LILYAMARA NUNES ALMEIDA', 11),
+(744, 'LUARA LAYLA OLIVEIRA MARQUES', 11),
+(745, 'LUÍS GUSTAVO BARBOSA AMARAL', 11),
+(746, 'LUÍS GUSTAVO FERREIRA DA SILVA', 11),
+(747, 'MARCOS PAULO SANTOS RODRIGUES', 11),
+(748, 'MARCOS RANIERI CRUZ DE OLIVEIRA', 11),
+(749, 'MARIA ARIANE DE SOUSA SILVA', 11),
+(750, '\"MARIA CIBELE DA COSTA NOGUEIRA', 11),
+(752, 'MARIA CLARA BARROSO MAGALHAES', 11),
+(753, 'MARIA CLARA HOLANDA DA SILVA', 11),
+(754, 'MARIA CRISTIELE DA SILVA SOARES', 11),
+(755, 'MARIA LARYSSA DE SOUZA BARBOSA', 11),
+(756, 'MARIA VITORIA LOPES ALMEIDA', 11),
+(757, 'NICOLE BARROS JERONIMO', 11),
+(758, 'PRISCILA KAREN FORTE ESTEVAO', 11),
+(759, 'RALEY SOUSA HONORATO', 11),
+(760, 'RENNAN RIBEIRO DE MORAIS', 11),
+(761, 'RICK ANDERSON RAMOS DA SILVA', 11),
+(762, 'TICIANE SILVA DE SALES', 11),
+(763, 'YURI RAYLANDER TOME FARIAS', 11);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `frequencias`
+-- Estrutura para tabela `frequencias`
 --
 
 CREATE TABLE `frequencias` (
@@ -587,16 +588,13 @@ CREATE TABLE `frequencias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `frequencias`
+-- Despejando dados para a tabela `frequencias`
 --
-
-INSERT INTO `frequencias` (`id`, `aluno_id`, `data_registro`, `aula_1`) VALUES
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `justificativas_alunos`
+-- Estrutura para tabela `justificativas_alunos`
 --
 
 CREATE TABLE `justificativas_alunos` (
@@ -611,13 +609,13 @@ CREATE TABLE `justificativas_alunos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `justificativas_alunos`
+-- Despejando dados para a tabela `justificativas_alunos`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `justificativas_faltas`
+-- Estrutura para tabela `justificativas_faltas`
 --
 
 CREATE TABLE `justificativas_faltas` (
@@ -635,10 +633,14 @@ CREATE TABLE `justificativas_faltas` (
   `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `justificativas_faltas`
+--
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `turmas`
+-- Estrutura para tabela `turmas`
 --
 
 CREATE TABLE `turmas` (
@@ -648,7 +650,7 @@ CREATE TABLE `turmas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `turmas`
+-- Despejando dados para a tabela `turmas`
 --
 
 INSERT INTO `turmas` (`id`, `serie`, `nome`) VALUES
@@ -671,7 +673,7 @@ INSERT INTO `turmas` (`id`, `serie`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `usuarios`
+-- Estrutura para tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -682,7 +684,7 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `usuarios`
+-- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `turma_id`, `senha`, `perfil`) VALUES
@@ -694,28 +696,28 @@ INSERT INTO `usuarios` (`id`, `turma_id`, `senha`, `perfil`) VALUES
 --
 
 --
--- Índices para tabela `alunos`
+-- Índices de tabela `alunos`
 --
 ALTER TABLE `alunos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `turma_id` (`turma_id`);
 
 --
--- Índices para tabela `frequencias`
+-- Índices de tabela `frequencias`
 --
 ALTER TABLE `frequencias`
   ADD PRIMARY KEY (`id`),
   ADD KEY `aluno_id` (`aluno_id`);
 
 --
--- Índices para tabela `justificativas_alunos`
+-- Índices de tabela `justificativas_alunos`
 --
 ALTER TABLE `justificativas_alunos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `aluno_data` (`aluno_id`,`data_registro`);
 
 --
--- Índices para tabela `justificativas_faltas`
+-- Índices de tabela `justificativas_faltas`
 --
 ALTER TABLE `justificativas_faltas`
   ADD PRIMARY KEY (`id`),
@@ -724,45 +726,45 @@ ALTER TABLE `justificativas_faltas`
   ADD KEY `idx_usuario` (`usuario_id`);
 
 --
--- Índices para tabela `turmas`
+-- Índices de tabela `turmas`
 --
 ALTER TABLE `turmas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `usuarios`
+-- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
   ADD KEY `turma_id` (`turma_id`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
 -- AUTO_INCREMENT de tabela `alunos`
 --
 ALTER TABLE `alunos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=539;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=764;
 
 --
 -- AUTO_INCREMENT de tabela `frequencias`
 --
 ALTER TABLE `frequencias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=309;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=401;
 
 --
 -- AUTO_INCREMENT de tabela `justificativas_alunos`
 --
 ALTER TABLE `justificativas_alunos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `justificativas_faltas`
 --
 ALTER TABLE `justificativas_faltas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de tabela `turmas`
@@ -777,29 +779,29 @@ ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Restrições para despejos de tabelas
+-- Restrições para tabelas despejadas
 --
 
 --
--- Limitadores para a tabela `alunos`
+-- Restrições para tabelas `alunos`
 --
 ALTER TABLE `alunos`
   ADD CONSTRAINT `alunos_ibfk_1` FOREIGN KEY (`turma_id`) REFERENCES `turmas` (`id`);
 
 --
--- Limitadores para a tabela `frequencias`
+-- Restrições para tabelas `frequencias`
 --
 ALTER TABLE `frequencias`
   ADD CONSTRAINT `frequencias_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`);
 
 --
--- Limitadores para a tabela `justificativas_alunos`
+-- Restrições para tabelas `justificativas_alunos`
 --
 ALTER TABLE `justificativas_alunos`
   ADD CONSTRAINT `fk_justificativa_aluno` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `usuarios`
+-- Restrições para tabelas `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`turma_id`) REFERENCES `turmas` (`id`);
