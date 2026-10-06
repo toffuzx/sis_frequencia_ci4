@@ -1037,18 +1037,63 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.key === 'Escape' && modal && modal.classList.contains('aberto')) fecharJanelaAluno();
     });
 
-    // Gravar justificativa do Perfil
+     // Gravar justificativa do Perfil
     const btnMarcar = document.getElementById('salvar-perfil-aluno');
+
     if (btnMarcar) {
         btnMarcar.addEventListener('click', function () {
-            const alunoId = modal.getAttribute('data-aluno');
-            const atrasado = document.querySelector('input[name="justificativa_atrasado"]').checked;
-            const fardamento = document.querySelector('input[name="justificativa_fardamento"]').checked;
-            const texto = observacoes ? observacoes.value.trim() : '';
 
+            // Pega os checkboxes marcados
+            const justificativas = document.querySelectorAll(
+                '.justificativa-checkbox:checked'
+            );
+
+            // Pega o campo de observações
+            const campoObservacoes = document.getElementById('observacoes-aluno');
+
+            // Pega o texto digitado
+            const texto = campoObservacoes
+                ? campoObservacoes.value.trim()
+                : '';
+
+            // =====================================================
+            // VALIDAÇÃO:
+            // Checkbox OU observação
+            // =====================================================
+            if (justificativas.length === 0 && texto === '') {
+                alert('Marque uma justificativa ou informe uma observação.');
+                return;
+            }
+
+            // =====================================================
+            // DADOS DO ALUNO
+            // =====================================================
+            const alunoId = modal.getAttribute('data-aluno');
+
+            const inputAtrasado = document.querySelector(
+                'input[name="justificativa_atrasado"]'
+            );
+
+            const inputFardamento = document.querySelector(
+                'input[name="justificativa_fardamento"]'
+            );
+
+            const atrasado = inputAtrasado
+                ? inputAtrasado.checked
+                : false;
+
+            const fardamento = inputFardamento
+                ? inputFardamento.checked
+                : false;
+
+            // =====================================================
+            // ENVIA PARA O SERVIDOR
+            // =====================================================
             fetch('<?= site_url("salvar_justificativa") ?>', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     aluno_id: alunoId,
                     data_registro: "<?= htmlspecialchars($data_filtro) ?>",
@@ -1059,21 +1104,36 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(resultado => {
+
                 if (resultado.sucesso) {
+
                     fecharJanelaAluno();
+
                     Swal.fire({
                         width: 350,
                         icon: 'success',
                         title: 'Sucesso!',
-                        text: resultado.mensagem || ' adicionada com sucesso.',
+                        text: resultado.mensagem || 'Registro salvo com sucesso.',
                         showConfirmButton: false,
-                        timer: 900,
-                    }).then(() => window.location.reload());
+                        timer: 900
+                    }).then(() => {
+                        window.location.reload();
+                    });
+
                 } else {
-                    alert(resultado.mensagem || 'Erro ao salvar justificativa.');
+
+                    alert(
+                        resultado.mensagem ||
+                        'Erro ao salvar justificativa.'
+                    );
                 }
             })
-            .catch(() => alert('Erro ao salvar a justificativa.'));
+            .catch(error => {
+
+                console.error(error);
+
+                alert('Erro ao salvar a justificativa.');
+            });
         });
     }
 
