@@ -301,7 +301,7 @@
         .modal-overlay {
             display: none;
             position: fixed;
-            z-index: 9999;
+            z-index: 1000;
             inset: 0;
             background: rgba(15, 23, 42, 0.65);
             padding: 20px;
@@ -1007,7 +1007,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault(); // Interrompe o envio para mostrar o Swal
 
                 Swal.fire({
-                    width: 350,
+                    width: 400,
                     title: 'Atenção!',
                     text: 'Existem alunos com falta e marcação',
                     icon: 'warning',
@@ -1052,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (perfilAtual === 'professor' && possuiFalta) {
                 Swal.fire({
-                    width: 350,
+                    width: 400,
                     icon: 'info',
                     title: 'Atenção',
                     text: 'Não é possível alterar as justificativas de um aluno que possui falta marcada.',
@@ -1140,8 +1140,15 @@ document.addEventListener('DOMContentLoaded', function () {
             // Checkbox OU observação
             // =====================================================
             if (justificativas.length === 0 && texto === '') {
-                alert('Marque uma justificativa ou informe uma observação.');
-                return;
+                 Swal.fire({
+                        width: 400,
+                        icon: 'warning',
+                        title: 'Erro!',
+                        text:'Marque pelo menos uma justificativa ou digite uma observação.',
+                        confirmButtonColor: '#3b8540',
+                       
+                    });
+                    return;
             }
 
             // =====================================================
@@ -1189,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     fecharJanelaAluno();
 
                     Swal.fire({
-                        width: 350,
+                        width: 400,
                         icon: 'success',
                         title: 'Sucesso!',
                         text: resultado.mensagem || 'Registro salvo com sucesso.',
@@ -1276,7 +1283,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalJustificativa() {
         fecharModalJustificativa(); 
         Swal.fire({
-            width: 350,
+            width: 400,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta justificativa?",
             icon: 'warning',
@@ -1301,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (resultado.sucesso) {
                         console.log(resultado);
                         Swal.fire({
-                            width: 350,
+                            width: 400,
                             icon: 'success',
                             title: 'Excluído!',
                             text: resultado.mensagem || 'Justificativa removida com sucesso.',
@@ -1320,7 +1327,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function excluirModalFrequencia() {
         fecharJanelaAluno();
         Swal.fire({
-            width: 350,
+            width: 400,
             title: 'Tem certeza?',
             text: "Deseja realmente remover esta marcação?",
             icon: 'warning',
@@ -1342,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json()).then(resultado => {
                     if (resultado.sucesso) {
                         Swal.fire({
-                            width: 350,
+                            width: 400,
                             showCancelButton: false,
                             showConfirmButton: false,
                             icon: 'success',
@@ -1390,7 +1397,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 fecharModalJustificativa();
                 Swal.fire({
-                    width: 350,
+                    width: 400,
                     icon: 'success',
                     title: 'Sucesso!',
                     text: resultado.mensagem || 'Justificativa salva com sucesso.',
