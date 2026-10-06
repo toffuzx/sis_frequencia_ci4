@@ -135,6 +135,7 @@ $perfil = session()->get('perfil');
     <script>
         Swal.fire({
             icon: 'success',
+            width: 400,
             title: 'Sucesso!',
             text: '<?= session()->getFlashdata('sucesso'); ?>',
             confirmButtonColor: '#3b8540'
@@ -144,6 +145,7 @@ $perfil = session()->get('perfil');
         <script>
             Swal.fire({
                 icon: 'error',
+                width: 400,
                 title: 'Erro!',
                 text: '<?= session()->getFlashdata('erro') ?>',
                 confirmButtonColor: '#e53e3e'
