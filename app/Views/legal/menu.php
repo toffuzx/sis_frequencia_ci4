@@ -146,6 +146,9 @@
         <img src="<?= base_url('img/logo.png.jpeg') ?>" alt="Logo Escola" class="school-logo">
     </div>
     <div class="menu-items">
+        <?php if ($perfil === 'professor'): ?>
+        <a href="<?= base_url('creditos') ?> " target="_blank" class="footer-creditos-link" title="Desenvolvedores do Sistema"></a>
+    <?php endif; ?>
         <a href="<?= base_url('dashboard') ?>"><i class="fa-solid fa-house"></i>Frequência</a>
         <a href="<?= base_url('tabela') ?>"><i class="fa-solid fa-table"></i>Tabela de Justificativas</a>
         <a href="<?= base_url('alterar_turma') ?>"><i class="fa-solid fa-users-gear"></i>Alterações de Turma</a>

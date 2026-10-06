@@ -24,7 +24,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f4f7f4; color: #333; }
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
         .page-title-section { margin-bottom: 25px; }
 
         .dashboard-filter-card {

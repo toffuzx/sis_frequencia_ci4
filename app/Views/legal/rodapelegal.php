@@ -31,4 +31,6 @@
 
 <footer class="footer-sistema">
     <span>&copy; <?php echo date('Y'); ?> EEEP Walter Ramos de Araújo.</span>
+
+    
 </footer>

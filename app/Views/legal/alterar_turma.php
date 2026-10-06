@@ -13,7 +13,7 @@ $perfil = session()->get('perfil');
         :root{ --primary-green:#3b8540; --primary-hover:#2c6b30; --bg-light:#f4f7f6; --text-dark:#2d3748; --text-gray:#718096; --error-red:#e53e3e; --success-green:#38a169; }
         *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
         body{ background:var(--bg-light); min-height:100vh; padding:40px 20px; color:var(--text-dark); }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px}
         .card{ background:white; padding:35px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,.04); margin-bottom: 25px; }
         .header-painel { text-align: center; margin-bottom: 30px; }
         .header-painel i { font-size: 50px; color: var(--primary-green); }
