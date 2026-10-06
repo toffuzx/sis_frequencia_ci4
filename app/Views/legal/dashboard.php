@@ -516,6 +516,24 @@
             .modal-aluno { max-height: 95vh; }
             th:first-child, td:first-child { width: 60%; }
         }
+
+        .btn-arquivo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #3b8540;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-arquivo:hover {
+    background: #2c6b30;
+}
+
     </style>
 </head>
 
@@ -759,7 +777,23 @@
                 </div>
                 <div class="campo-modal"id="atestado-campo" style="display:none;">
                     <label class="titulo-campo" for="atestado-arquivo">Atestado / documento</label>
-                    <input id="atestado-arquivo" name="atestado" class="arquivo-input" type="file" accept=".pdf,.jpg,.jpeg,.png,.pdf,image/*">
+                    <input
+    id="atestado-arquivo"
+    name="atestado"
+    type="file"
+    accept=".pdf,.jpg,.jpeg,.png,image/*"
+    style="display:none;"
+>
+
+<label for="atestado-arquivo" class="btn-arquivo">
+    <i class="fa-solid fa-paperclip"></i>
+    Anexar atestado
+</label>
+
+<div id="nome-arquivo-selecionado" class="arquivo-info">
+    Nenhum arquivo selecionado.
+</div>
+
                     <div id="arquivo-existente" class="arquivo-info"></div>
                     <div id="arquivo-link" class="arquivo-info"></div>
                 </div>
@@ -806,20 +840,65 @@ const divArquivoExistente = document.getElementById('arquivo-existente');
 
 // Função centralizada para validar o estado do campo de arquivo
 function verificarMotivo() {
-    if (selectFalta.value === "Atestado médico") {
-        blocoExtra.style.display = "block"; 
-        
-        // Verifica se o texto na div diz que há um documento anexado
-        const temArquivoSalvo = divArquivoExistente.textContent.includes("Documento atual:");
-        
-        // Só obriga o upload se o aluno NÃO tiver um arquivo já gravado
-        inputArquivo.required = !temArquivoSalvo;          
+    const motivo = selectFalta.value;
+    const campoObservacoes = document.getElementById('observacoes-falta');
+
+    // Limpa mensagens anteriores
+    inputArquivo.setCustomValidity('');
+    campoObservacoes.setCustomValidity('');
+
+    // Atestado médico → exige arquivo
+    if (motivo === "Atestado médico") {
+        blocoExtra.style.display = "block";
+        inputArquivo.required = true;
+
+        inputArquivo.oninvalid = function () {
+            this.setCustomValidity('Anexe o atestado médico.');
+        };
+
+        inputArquivo.oninput = function () {
+            this.setCustomValidity('');
+        };
+
     } else {
-        blocoExtra.style.display = "none"; 
-        inputArquivo.required = false;       
-        inputArquivo.value = "";               
+        blocoExtra.style.display = "none";
+        inputArquivo.required = false;
+        inputArquivo.value = "";
+        inputArquivo.setCustomValidity('');
+        inputArquivo.oninvalid = null;
+        inputArquivo.oninput = null;
+    }
+
+    // Outro → exige observação
+    if (motivo === "Outro") {
+        campoObservacoes.required = true;
+
+        campoObservacoes.oninvalid = function () {
+            this.setCustomValidity('Informe uma observação.');
+        };
+
+        campoObservacoes.oninput = function () {
+            this.setCustomValidity('');
+        };
+
+    } else {
+        campoObservacoes.required = false;
+        campoObservacoes.setCustomValidity('');
+        campoObservacoes.oninvalid = null;
+        campoObservacoes.oninput = null;
     }
 }
+inputArquivo.addEventListener('change', function () {
+    const nomeArquivo = document.getElementById('nome-arquivo-selecionado');
+
+    if (this.files.length > 0) {
+        nomeArquivo.textContent = 'Arquivo selecionado: ' + this.files[0].name;
+    } else {
+        nomeArquivo.textContent = 'Nenhum arquivo selecionado.';
+    }
+});
+
+
 
 // Monitora se o usuário mudar a opção manualmente clicando na tela
 selectFalta.addEventListener('change', verificarMotivo);
