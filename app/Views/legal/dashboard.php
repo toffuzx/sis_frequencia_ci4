@@ -776,7 +776,7 @@
                     <textarea id="observacoes-falta" name="observacoes" class="observacao-input" placeholder="Observações sobre a justificativa..."></textarea>
                 </div>
                 <div class="campo-modal"id="atestado-campo" style="display:none;">
-                    <label class="titulo-campo" for="atestado-arquivo">Atestado / documento</label>
+                    <label class="titulo-campo" for="atestado-arquivo">Atestado </label>
                     <input
     id="atestado-arquivo"
     name="atestado"
@@ -1244,9 +1244,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const arquivoExistente = document.getElementById('arquivo-existente');
         arquivoExistente.textContent = botao.dataset.arquivoNome
-            ? 'Documento atual: ' + botao.dataset.arquivoNome
-            : 'Nenhum documento anexado.';
-
+           
         const linkArquivo = document.getElementById('arquivo-link');
         const baseUrl = '<?= site_url('download/atestado') ?>';
 
